@@ -1,34 +1,51 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FaEye } from "react-icons/fa";
 
 import { useForm } from "react-hook-form";
 import axios from "axios";
+import { AuthContext } from "../Contexts/AuthContextComponent";
 const imageHostingKey = import.meta.env.VITE_IMAGE_HOSTING_KEY;
-const imageHostingApi = `https://api.imgbb.com/1/upload?key=${imageHostingKey}`
+const imageHostingApi = `https://api.imgbb.com/1/upload?key=${imageHostingKey}`;
 
 const Register = () => {
+  const { registerWithEmailPass, updateUserProfile } = useContext(AuthContext);
   const [displayPass, setDisplayPass] = useState(true);
   const { register, handleSubmit } = useForm();
 
   const onSubmit = async (data) => {
-   const imageFile = {image : data.file[0]}
-   const res = await axios.post(imageHostingApi, imageFile, {
-    headers: {
-      "content-type" : "multipart/form-data"
-    }
-   })
+    const imageFile = { image: data.file[0] };
+    const res = await axios.post(imageHostingApi, imageFile, {
+      headers: {
+        "content-type": "multipart/form-data",
+      },
+    });
 
-   if(res.data.success){
-    const userInfo = {
-      userName : data.user,
-      userEmail : data.email,
-      userPass : data.password,
-      image : res.data.data.display_url
+    if (res.data.success) {
+      // const userInfo = {
+      //   userName : data.user,
+      //   userEmail : data.email,
+      //   userPass : data.password,
+      //   image : res.data.data.display_url
+      // }
+      const photo = res.data.data.display_url;
+      const { email, password, user } = data;
+      // console.log(userInfo)
+      registerWithEmailPass(email, password)
+        .then(() => {
+          updateUserProfile(user, photo)
+            .then((cred) => {
+              console.log(cred);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
-    console.log(userInfo)
-   }
   };
-  
+
   return (
     <div className="flex flex-col my-6 max-w-md p-6 rounded-md sm:p-10 bg-gray-900 text-gray-100 mx-auto">
       <div className="mb-8 text-center">
@@ -55,7 +72,7 @@ const Register = () => {
             </label>
             <input
               type="email"
-             {...register("email")}
+              {...register("email")}
               id="email"
               placeholder="leroy@jenkins.com"
               className="w-full px-3 py-2 border rounded-md border-gray-700 bg-gray-900 text-gray-100"
@@ -85,7 +102,7 @@ const Register = () => {
             <div className="flex">
               <input
                 type="file"
-               {...register("file")}
+                {...register("file")}
                 id="files"
                 accept="image/*"
                 className=" border-2 border-dashed border-gray-700 w-full rounded-md "
