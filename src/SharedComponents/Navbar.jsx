@@ -92,9 +92,9 @@ const Navbar = () => {
           <button className="px-8 py-3 font-semibold rounded bg-violet-400 text-gray-900">
             Log in
           </button>
-          <button className="px-8 py-3 font-semibold rounded bg-violet-400 text-gray-900">
+          <Link to="/register" className="px-8 py-3 font-semibold rounded bg-violet-400 text-gray-900">
             Sign Up
-          </button>
+          </Link>
         </div>
         <button className="p-4 md:hidden">
           <IoMenu className="text-2xl"></IoMenu>

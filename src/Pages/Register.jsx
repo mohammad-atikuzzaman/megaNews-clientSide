@@ -1,38 +1,41 @@
 import { useState } from "react";
 import { FaEye } from "react-icons/fa";
 
+import { useForm } from "react-hook-form";
+import axios from "axios";
+const imageHostingKey = import.meta.env.VITE_IMAGE_HOSTING_KEY;
+const imageHostingApi = `https://api.imgbb.com/1/upload?key=${imageHostingKey}`
+
 const Register = () => {
-  const [displayPass, setDisplayPass] = useState(false);
+  const [displayPass, setDisplayPass] = useState(true);
+  const { register, handleSubmit } = useForm();
 
-  const handleSingUp = (e) => {
-    e.preventDefault();
-    const form = e.target;
-    // const email = form.email.value;
-    // const name = form.userName.value;
-    // const password = form.password.value;
-    const getPhoto = form.files.files[0];
-    // console.log(getPhoto);
-    if (getPhoto) {
-      const formData = new FormData();
-      formData.append("photo", getPhoto);
-
-      const apiKey = "2d82b387e624a7d330a8898ccabbbd09";
-      const url = `https://api.imgbb.com/1/upload?key=${apiKey}`;
-      fetch(url, {
-        method: "POST",
-        body: formData,
-      })
-        .then((res) => res.json())
-        .then((data) => console.log(data));
+  const onSubmit = async (data) => {
+   const imageFile = {image : data.file[0]}
+   const res = await axios.post(imageHostingApi, imageFile, {
+    headers: {
+      "content-type" : "multipart/form-data"
     }
+   })
+
+   if(res.data.success){
+    const userInfo = {
+      userName : data.user,
+      userEmail : data.email,
+      userPass : data.password,
+      image : res.data.data.display_url
+    }
+    console.log(userInfo)
+   }
   };
+  
   return (
     <div className="flex flex-col my-6 max-w-md p-6 rounded-md sm:p-10 bg-gray-900 text-gray-100 mx-auto">
       <div className="mb-8 text-center">
         <h1 className="my-3 text-4xl font-bold">Sign Up</h1>
         <p className="text-sm text-gray-400">Sign Up to Join Us</p>
       </div>
-      <form onSubmit={handleSingUp} className="space-y-12">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-12">
         <div className="space-y-4">
           <div>
             <label htmlFor="userName" className="block mb-2 text-sm">
@@ -40,7 +43,7 @@ const Register = () => {
             </label>
             <input
               type="text"
-              name="userName"
+              {...register("user")}
               id="userName"
               placeholder="User Name"
               className="w-full px-3 py-2 border rounded-md border-gray-700 bg-gray-900 text-gray-100"
@@ -52,7 +55,7 @@ const Register = () => {
             </label>
             <input
               type="email"
-              name="email"
+             {...register("email")}
               id="email"
               placeholder="leroy@jenkins.com"
               className="w-full px-3 py-2 border rounded-md border-gray-700 bg-gray-900 text-gray-100"
@@ -66,7 +69,7 @@ const Register = () => {
             </div>
             <input
               type={displayPass ? "password" : "text"}
-              name="password"
+              {...register("password")}
               id="password"
               placeholder="******"
               className="w-full px-3 py-2 border rounded-md border-gray-700 bg-gray-900 text-gray-100"
@@ -82,7 +85,7 @@ const Register = () => {
             <div className="flex">
               <input
                 type="file"
-                name="files"
+               {...register("file")}
                 id="files"
                 accept="image/*"
                 className=" border-2 border-dashed border-gray-700 w-full rounded-md "
