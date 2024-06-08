@@ -1,18 +1,20 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { IoMenu } from "react-icons/io5";
 import { Link, NavLink } from "react-router-dom";
-import { AuthContext } from "../Contexts/AuthContextComponent";
+import useAuth from "../Hooks/useAuth";
+import LoadingScreen from "./LoadingScreen";
 
 const Navbar = () => {
-  const [disMobMenu, setDisMobMenu]= useState(true)
-  const { user, logOut } = useContext(AuthContext);
+  const [disMobMenu, setDisMobMenu] = useState(false);
+  const [disMobProfile, setDisMobProfile] = useState(false);
+  const { user, logOut, loading } = useAuth();
   const menu = (
     <>
       <li>
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? "text-violet-400 border- border-b-2 border-violet-400 p-2"
+              ? "text-violet-400 border- border-b-2 border-violet-400 md:p-2"
               : ""
           }
           to="/">
@@ -23,10 +25,10 @@ const Navbar = () => {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? "text-violet-400 border- border-b-2 border-violet-400 p-2"
+              ? "text-violet-400 border- border-b-2 border-violet-400 md:p-2"
               : ""
           }
-          to="/add-articles">
+          to="/add-article">
           Add Articles
         </NavLink>
       </li>
@@ -34,7 +36,7 @@ const Navbar = () => {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? "text-violet-400 border- border-b-2 border-violet-400 p-2"
+              ? "text-violet-400 border- border-b-2 border-violet-400 md:p-2"
               : ""
           }
           to="/all-articles">
@@ -45,7 +47,7 @@ const Navbar = () => {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? "text-violet-400 border- border-b-2 border-violet-400 p-2"
+              ? "text-violet-400 border- border-b-2 border-violet-400 md:p-2"
               : ""
           }
           to="/subscription">
@@ -56,7 +58,7 @@ const Navbar = () => {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? "text-violet-400 border- border-b-2 border-violet-400 p-2"
+              ? "text-violet-400 border- border-b-2 border-violet-400 md:p-2"
               : ""
           }
           to="/dashboard">
@@ -67,7 +69,7 @@ const Navbar = () => {
         <NavLink
           className={({ isActive }) =>
             isActive
-              ? "text-violet-400 border- border-b-2 border-violet-400 p-2"
+              ? "text-violet-400 border- border-b-2 border-violet-400 md:p-2"
               : ""
           }
           to="/my-articles">
@@ -110,29 +112,66 @@ const Navbar = () => {
         </div>
 
         <div>
-          {user ? (
-            <div className="flex items-center gap-4">
-              <img
-                alt="user name"
-                className="w-12 h-12 rounded-full ring-2 ring-offset-4 dark:bg-gray-500 dark:ring-violet-600 dark:ring-offset-gray-100"
-                src={user?.photoURL}
-              />
-              <button
-                onClick={() => logOut()}
-                className="px-3 py-2 bg-yellow-500 rounded-lg">
-                LogOut
-              </button>
-            </div>
+          {loading ? (
+            <LoadingScreen></LoadingScreen>
           ) : (
-            <div className="items-center flex gap-2">
-              <button className=" px-3 py-2 md:px-8 md:py-3 font-semibold rounded bg-violet-400 text-gray-900">
-                Log in
-              </button>
-              <Link
-                to="/register"
-                className="px-3 py-2  md:px-8 md:py-3 font-semibold rounded bg-violet-400 text-gray-900">
-                Sign Up
-              </Link>
+            <div>
+              {user ? (
+                <div className="flex items-center gap-4">
+                  <div className="relative">
+                    <img
+                      alt="user name"
+                      onClick={() => setDisMobProfile(!disMobProfile)}
+                      title={user?.displayName}
+                      className={`w-10 h-10 rounded-full ring-2 ring-offset-4 dark:bg-gray-500 dark:ring-violet-600 dark:ring-offset-gray-100`}
+                      src={user?.photoURL}
+                    />
+                    <div className="absolute right-0 md:hidden">
+                      <ul
+                        className={
+                          disMobProfile
+                            ? "block space-y-2  bg-gray-800 p-2  border border-dashed"
+                            : "hidden"
+                        }>
+                        <li className="bg-gray-500 px-1 rounded-lg">
+                          {user?.displayName}
+                        </li>
+                        <li className="bg-gray-500 px-1 rounded-lg">
+                          {user?.email}
+                        </li>
+                        <Link to="/profile" className="block">
+                          <li className="bg-gray-500 px-1 rounded-lg">
+                            Profile
+                          </li>
+                        </Link>
+                        <li
+                          onClick={() => logOut()}
+                          className="bg-red-500 px-1 rounded-lg">
+                          Log out
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => logOut()}
+                    className="px-3 py-2 bg-violet-400 text-gray-900 rounded-lg hidden md:block">
+                    LogOut
+                  </button>
+                </div>
+              ) : (
+                <div className="items-center flex gap-2">
+                  <Link
+                    to="/login"
+                    className=" px-3 py-2 md:px-6 md:py-2 font-semibold rounded bg-violet-400 text-gray-900">
+                    Log in
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="px-3 py-2  md:px-6 md:py-2 font-semibold rounded bg-violet-400 text-gray-900">
+                    Sign Up
+                  </Link>
+                </div>
+              )}
             </div>
           )}
         </div>

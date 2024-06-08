@@ -1,17 +1,18 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { FaEye } from "react-icons/fa";
 
 import { useForm } from "react-hook-form";
 import axios from "axios";
-import { AuthContext } from "../Contexts/AuthContextComponent";
+import { Link, useNavigate } from "react-router-dom";
+import useAuth from "../Hooks/useAuth";
 const imageHostingKey = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const imageHostingApi = `https://api.imgbb.com/1/upload?key=${imageHostingKey}`;
 
 const Register = () => {
-  const { registerWithEmailPass, updateUserProfile } = useContext(AuthContext);
+  const { registerWithEmailPass, updateUserProfile } = useAuth();
   const [displayPass, setDisplayPass] = useState(true);
   const { register, handleSubmit } = useForm();
-
+  const navigate = useNavigate()
   const onSubmit = async (data) => {
     const imageFile = { image: data.file[0] };
     const res = await axios.post(imageHostingApi, imageFile, {
@@ -35,6 +36,7 @@ const Register = () => {
           updateUserProfile(user, photo)
             .then((cred) => {
               console.log(cred);
+              navigate("/")
             })
             .catch((err) => {
               console.log(err);
@@ -119,14 +121,10 @@ const Register = () => {
             />
           </div>
           <p className="px-6 text-sm text-center text-gray-400">
-            Don't have an account yet?
-            <a
-              rel="noopener noreferrer"
-              href="#"
-              className="hover:underline text-violet-400">
-              Sign up
-            </a>
-            .
+            Already have an account?
+            <Link to="/login" className="hover:underline text-violet-400">
+              Login
+            </Link>
           </p>
         </div>
       </form>

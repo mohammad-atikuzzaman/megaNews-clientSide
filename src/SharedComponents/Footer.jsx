@@ -15,7 +15,7 @@ const Footer = () => {
               />
             </div>
             <span className="self-center text-2xl font-semibold">
-              Brand name
+              Mega News
             </span>
           </a>
         </div>
