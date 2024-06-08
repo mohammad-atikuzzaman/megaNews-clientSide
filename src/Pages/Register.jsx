@@ -6,6 +6,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 import Swal from "sweetalert2";
+import useAxuisPublic from "../Hooks/useAxuisPublic";
 const imageHostingKey = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const imageHostingApi = `https://api.imgbb.com/1/upload?key=${imageHostingKey}`;
 
@@ -14,7 +15,13 @@ const Register = () => {
     useAuth();
   const [displayPass, setDisplayPass] = useState(true);
   const [spiner, setSpiner] = useState(false);
-  const { register, handleSubmit, reset } = useForm();
+  const axiosPublic = useAxuisPublic();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
   const navigate = useNavigate();
   const onSubmit = async (data) => {
     setSpiner(true);
@@ -26,25 +33,26 @@ const Register = () => {
     });
     reset();
     if (res.data.success) {
-      // const userInfo = {
-      //   userName : data.user,
-      //   userEmail : data.email,
-      //   userPass : data.password,
-      //   image : res.data.data.display_url
-      // }
+      const userInfo = {
+        userName: data.user,
+        userEmail: data.email,
+        image: res.data.data.display_url,
+      };
       const photo = res.data.data.display_url;
       const { email, password, user } = data;
       // console.log(userInfo)
       registerWithEmailPass(email, password)
-        .then((res) => {
+        .then((fire) => {
           updateUserProfile(user, photo)
             .then(() => {
-              console.log(res);
+              axiosPublic.post("/users", userInfo)
+              .then(res =>console.log("success", res))
+              .catch(err => console.log(err))
               navigate("/");
               Swal.fire({
                 position: "center",
                 icon: "success",
-                title: `${res.user.displayName} Signed up successful`,
+                title: `${fire.user.displayName} Signed up successful`,
                 showConfirmButton: false,
                 timer: 1500,
               });
@@ -62,13 +70,25 @@ const Register = () => {
   const handleGoogleLogin = () => {
     logInWithGoogle()
       .then((res) => {
-        console.log(res.user);
+        // console.log(res.user);
+        const userInfo = {
+          userName : res.user?.displayName,
+          userEmail : res.user?.email,
+          image: res.user?.photoURL
+        }
+        axiosPublic.post("/users", userInfo)
+        .then(res =>{
+          console.log(res.data)
+        })
+        .catch(err =>{
+          console.log(err)
+        })
         Swal.fire({
           position: "center",
           icon: "success",
           title: `${res.user.displayName} login successful`,
           showConfirmButton: false,
-          timer: 1000,
+          timer: 1500,
         });
         navigate("/");
       })
@@ -91,11 +111,16 @@ const Register = () => {
             </label>
             <input
               type="text"
-              {...register("user")}
+              {...register("user", { required: true })}
               id="userName"
               placeholder="User Name"
               className="w-full px-3 py-2 border rounded-md border-gray-700 bg-gray-900 text-gray-100"
             />
+            {errors.user && (
+              <span className="text-red-500 text-sm">
+                User Name is required
+              </span>
+            )}
           </div>
           <div>
             <label htmlFor="email" className="block mb-2 text-sm">
@@ -103,11 +128,14 @@ const Register = () => {
             </label>
             <input
               type="email"
-              {...register("email")}
+              {...register("email", { required: true })}
               id="email"
               placeholder="leroy@jenkins.com"
               className="w-full px-3 py-2 border rounded-md border-gray-700 bg-gray-900 text-gray-100"
             />
+            {errors.email && (
+              <span className="text-red-500 text-sm">Email is required</span>
+            )}
           </div>
           <div className="relative">
             <div className="flex justify-between mb-2">
@@ -117,11 +145,29 @@ const Register = () => {
             </div>
             <input
               type={displayPass ? "password" : "text"}
-              {...register("password")}
+              {...register("password", {
+                required: true,
+                minLength: 6,
+                pattern: /(?=.*[A-Z])(?=.*[!@#$&*])(?=.*[0-9])(?=.*[a-z])/,
+              })}
               id="password"
               placeholder="******"
               className="w-full px-3 py-2 border rounded-md border-gray-700 bg-gray-900 text-gray-100"
             />
+            {errors.password?.type === "required" && (
+              <span className="text-red-500 text-sm">Password is required</span>
+            )}
+            {errors.password?.type === "minLength" && (
+              <span className="text-red-500 text-sm">
+                Password must be min 6 characters
+              </span>
+            )}
+            {errors.password?.type === "pattern" && (
+              <span className="text-red-500 text-sm">
+                Password must be a uppercase, a lowercase, special char and a
+                numeric value
+              </span>
+            )}
             <FaEye
               onClick={() => setDisplayPass(!displayPass)}
               className="absolute top-10 right-5 cursor-pointer"></FaEye>
@@ -133,11 +179,16 @@ const Register = () => {
             <div className="flex">
               <input
                 type="file"
-                {...register("file")}
+                {...register("file", { required: true })}
                 id="files"
                 accept="image/*"
                 className=" border-2 border-dashed border-gray-700 w-full rounded-md "
               />
+              {errors.user && (
+                <span className="text-red-500 text-sm">
+                  This field is required
+                </span>
+              )}
             </div>
           </div>
         </div>

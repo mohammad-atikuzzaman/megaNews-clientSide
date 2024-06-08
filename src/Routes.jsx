@@ -10,11 +10,13 @@ import DashBoard from "./Pages/DashBoard";
 import Profile from "./Pages/Profile";
 import ProtectedRoute from "./UsersProtect/ProtectedRoute";
 import MyArticle from "./Pages/MyArticle";
+import ErrorComponent from "./SharedComponents/ErrorComponent";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App></App>,
+    errorElement: <ErrorComponent></ErrorComponent>,
     children: [
       {
         path: "/",

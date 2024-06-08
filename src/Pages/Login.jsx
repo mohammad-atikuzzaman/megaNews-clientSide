@@ -1,10 +1,11 @@
-import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { FaEye, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 import Swal from "sweetalert2";
+import { toast } from "react-toastify";
+import useAxuisPublic from "../Hooks/useAxuisPublic";
 
 const Login = () => {
   const [displayPass, setDisplayPass] = useState(true);
@@ -12,19 +13,21 @@ const Login = () => {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   const location = useLocation();
+  const axiosPublic = useAxuisPublic()
+
 
   const onSubmit = async (data) => {
     const { email, password } = data;
     logInWithEmailPass(email, password)
       .then((res) => {
-        console.log(res.user.displayName);
+        // console.log(res.user.displayName);
 
         Swal.fire({
           position: "center",
           icon: "success",
           title: `${res.user.displayName} login successful`,
           showConfirmButton: false,
-          timer: 1000,
+          timer: 1500,
         });
 
         if (location?.state) {
@@ -33,21 +36,35 @@ const Login = () => {
           navigate("/");
         }
       })
-      .catch((err) => {
-        console.log(err);
+      .catch(() => {
+        toast.error("Please check your email/ password")
+        // console.error(err);
       });
   };
 
   const handleGoogleLogin = () => {
     logInWithGoogle()
       .then((res) => {
-        console.log(res.user);
+        // console.log(res.user);
+        const userInfo = {
+          userName: res.user?.displayName,
+          userEmail: res.user?.email,
+          image: res.user?.photoURL,
+        };
+        axiosPublic
+          .post("/users", userInfo)
+          .then((res) => {
+            console.log(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
         Swal.fire({
           position: "center",
           icon: "success",
           title: `${res.user.displayName} login successful`,
           showConfirmButton: false,
-          timer: 1000,
+          timer: 1500,
         });
         navigate("/");
       })

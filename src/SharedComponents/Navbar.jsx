@@ -3,6 +3,7 @@ import { IoMenu } from "react-icons/io5";
 import { Link, NavLink } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 import LoadingScreen from "./LoadingScreen";
+import { toast } from "react-toastify";
 
 const Navbar = () => {
   const [disMobMenu, setDisMobMenu] = useState(false);
@@ -78,6 +79,16 @@ const Navbar = () => {
       </li>
     </>
   );
+
+  const handleLogOut =()=>{
+     logOut()
+     .then(() =>{
+      toast.warn("Account logged out")
+     })
+     .catch(err =>{
+      toast.error(`${err.message}`)
+     })
+  }
   return (
     <header className="p-2 bg-gray-800 text-gray-100">
       <div className="container flex items-center justify-between h-16 mx-auto">
@@ -145,7 +156,7 @@ const Navbar = () => {
                           </li>
                         </Link>
                         <li
-                          onClick={() => logOut()}
+                          onClick={handleLogOut}
                           className="bg-red-500 px-1 rounded-lg">
                           Log out
                         </li>
@@ -153,7 +164,7 @@ const Navbar = () => {
                     </div>
                   </div>
                   <button
-                    onClick={() => logOut()}
+                    onClick={handleLogOut}
                     className="px-3 py-2 bg-violet-400 text-gray-900 rounded-lg hidden md:block">
                     LogOut
                   </button>

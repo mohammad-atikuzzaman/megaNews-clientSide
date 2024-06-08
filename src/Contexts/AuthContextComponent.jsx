@@ -9,6 +9,7 @@ import {
 } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import auth from "../firebase.init";
+import axios from "axios";
 
 export const AuthContext = createContext(null);
 const googleProvider = new GoogleAuthProvider();
@@ -46,29 +47,29 @@ const AuthContextComponent = ({ children }) => {
       const email = currentUser?.email || user?.email;
       const logedUser = { email };
       setLoading(false);
-      // if (currentUser) {
-      //   axios
-      //     .post("https://vibepalace.vercel.app/jwt", logedUser, {
-      //       withCredentials: true,
-      //     })
-      //     .then((res) => {
-      //       if (res.data.success) {
-      //         // console.log("jwt res :", res);
-      //       }
-      //     })
-      //     .catch((err) => console.log(err));
-      // } else {
-      //   axios
-      //     .post("https://vibepalace.vercel.app/logout", logedUser, {
-      //       withCredentials: true,
-      //     })
-      //     .then((res) => {
-      //       // console.log(res.data);
-      //     })
-      //     .catch((err) => {
-      //       console.log(err);
-      //     });
-      // }
+      if (currentUser) {
+        axios
+          .post("http://localhost:5000/jwt", logedUser, {
+            withCredentials: true,
+          })
+          .then((res) => {
+            if (res.data.success) {
+              // console.log("jwt res :", res);
+            }
+          })
+          .catch((err) => console.log(err));
+      } else {
+        axios
+          .post("http://localhost:5000/logout", logedUser, {
+            withCredentials: true,
+          })
+          .then((res) => {
+            // console.log(res.data);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }
     });
 
     return () => unSubscribe();
