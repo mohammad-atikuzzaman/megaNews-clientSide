@@ -1,13 +1,14 @@
 import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaEye } from "react-icons/fa";
+import { FaEye, FaGoogle } from "react-icons/fa";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [displayPass, setDisplayPass] = useState(true);
-  const { logInWithEmailPass } = useAuth();
+  const { logInWithEmailPass, logInWithGoogle } = useAuth();
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   const location = useLocation();
@@ -16,12 +17,39 @@ const Login = () => {
     const { email, password } = data;
     logInWithEmailPass(email, password)
       .then((res) => {
-        console.log(res);
+        console.log(res.user.displayName);
+
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: `${res.user.displayName} login successful`,
+          showConfirmButton: false,
+          timer: 1000,
+        });
+
         if (location?.state) {
           navigate(location?.state);
         } else {
           navigate("/");
         }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleGoogleLogin = () => {
+    logInWithGoogle()
+      .then((res) => {
+        console.log(res.user);
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: `${res.user.displayName} login successful`,
+          showConfirmButton: false,
+          timer: 1000,
+        });
+        navigate("/");
       })
       .catch((err) => {
         console.log(err);
@@ -81,6 +109,14 @@ const Login = () => {
           </p>
         </div>
       </form>
+      <div className="mt-4">
+        <button
+          onClick={handleGoogleLogin}
+          className=" mx-auto w-full flex items-center justify-center gap-4 border-2 border-violet-400 p-2 rounded-md">
+          <FaGoogle></FaGoogle>
+          <p>Login with google</p>
+        </button>
+      </div>
     </div>
   );
 };

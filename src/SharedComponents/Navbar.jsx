@@ -126,7 +126,7 @@ const Navbar = () => {
                       className={`w-10 h-10 rounded-full ring-2 ring-offset-4 dark:bg-gray-500 dark:ring-violet-600 dark:ring-offset-gray-100`}
                       src={user?.photoURL}
                     />
-                    <div className="absolute right-0 md:hidden">
+                    <div className="absolute right-0 md:-right-24">
                       <ul
                         className={
                           disMobProfile
