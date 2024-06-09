@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 
 const imageHostingKey = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const imageHostingApi = `https://api.imgbb.com/1/upload?key=${imageHostingKey}`;
-// console.log(imageHostingApi);
+
 
 const AddPublisher = () => {
   const {
