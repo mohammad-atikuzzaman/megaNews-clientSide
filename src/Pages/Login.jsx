@@ -10,11 +10,14 @@ import useAxuisPublic from "../Hooks/useAxuisPublic";
 const Login = () => {
   const [displayPass, setDisplayPass] = useState(true);
   const { logInWithEmailPass, logInWithGoogle } = useAuth();
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const navigate = useNavigate();
   const location = useLocation();
-  const axiosPublic = useAxuisPublic()
-
+  const axiosPublic = useAxuisPublic();
 
   const onSubmit = async (data) => {
     const { email, password } = data;
@@ -37,7 +40,7 @@ const Login = () => {
         }
       })
       .catch(() => {
-        toast.error("Please check your email/ password")
+        toast.error("Please check your email/ password");
         // console.error(err);
       });
   };
@@ -91,6 +94,9 @@ const Login = () => {
               placeholder="leroy@jenkins.com"
               className="w-full px-3 py-2 border rounded-md border-gray-700 bg-gray-900 text-gray-100"
             />
+            {errors.email && (
+              <span className="text-red-500 text-sm">Email is required</span>
+            )}
           </div>
           <div className="relative">
             <div className="flex justify-between mb-2">
@@ -105,6 +111,20 @@ const Login = () => {
               placeholder="******"
               className="w-full px-3 py-2 border rounded-md border-gray-700 bg-gray-900 text-gray-100"
             />
+            {errors.password?.type === "required" && (
+              <span className="text-red-500 text-sm">Password is required</span>
+            )}
+            {errors.password?.type === "minLength" && (
+              <span className="text-red-500 text-sm">
+                Password must be min 6 characters
+              </span>
+            )}
+            {errors.password?.type === "pattern" && (
+              <span className="text-red-500 text-sm">
+                Password must be a uppercase, a lowercase, special char and a
+                numeric value
+              </span>
+            )}
             <FaEye
               onClick={() => setDisplayPass(!displayPass)}
               className="absolute top-10 right-5 cursor-pointer"></FaEye>
