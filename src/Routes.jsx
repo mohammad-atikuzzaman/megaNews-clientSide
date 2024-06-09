@@ -6,11 +6,12 @@ import Home from "./Pages/Home";
 import AddArticle from "./Pages/AddArticle";
 import AllArticle from "./Pages/AllArticle";
 import Subscription from "./Pages/Subscription";
-import DashBoard from "./Pages/DashBoard";
 import Profile from "./Pages/Profile";
 import ProtectedRoute from "./UsersProtect/ProtectedRoute";
 import MyArticle from "./Pages/MyArticle";
 import ErrorComponent from "./SharedComponents/ErrorComponent";
+import DashBoard from "./DashBoard";
+import Users from "./Pages/Users";
 
 const router = createBrowserRouter([
   {
@@ -51,10 +52,6 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "/dashboard",
-        element: <DashBoard></DashBoard>,
-      },
-      {
         path: "/my-articles",
         element: (
           <ProtectedRoute>
@@ -71,6 +68,20 @@ const router = createBrowserRouter([
         ),
       },
     ],
+  },
+  {
+    path: "/dashboard",
+    element: <DashBoard></DashBoard>,
+    children: [
+      {
+        path: "users",
+        element: <Users></Users>
+      },
+      {
+        path: "all-article",
+        element: <AllArticle></AllArticle>
+      },
+    ]
   },
 ]);
 

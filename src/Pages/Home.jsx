@@ -1,4 +1,4 @@
-import React from 'react';
+import Carocel from '../components/Carocel';
 
 const Home = () => {
   return (
@@ -6,6 +6,9 @@ const Home = () => {
       <h2>
         this is home component
       </h2>
+      <div>
+        <Carocel></Carocel>
+      </div>
     </div>
   );
 };
