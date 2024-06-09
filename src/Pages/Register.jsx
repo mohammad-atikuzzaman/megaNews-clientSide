@@ -23,6 +23,8 @@ const Register = () => {
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
+
+  
   const onSubmit = async (data) => {
     setSpiner(true);
     const imageFile = { image: data.file[0] };

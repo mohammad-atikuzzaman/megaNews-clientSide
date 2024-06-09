@@ -12,6 +12,8 @@ import MyArticle from "./Pages/MyArticle";
 import ErrorComponent from "./SharedComponents/ErrorComponent";
 import DashBoard from "./DashBoard";
 import Users from "./Pages/Users";
+import AdminProtect from "./UsersProtect/AdminProtect";
+import AddPublisher from "./Pages/AddPublisher";
 
 const router = createBrowserRouter([
   {
@@ -75,15 +77,30 @@ const router = createBrowserRouter([
     children: [
       {
         path: "users",
-        element: <Users></Users>
+        element: (
+          <AdminProtect>
+            <Users></Users>
+          </AdminProtect>
+        ),
       },
       {
         path: "all-article",
-        element: <AllArticle></AllArticle>
+        element: (
+          <AdminProtect>
+            <AllArticle></AllArticle>
+          </AdminProtect>
+        ),
       },
-    ]
+      {
+        path: "add-publisher",
+        element: (
+          <AdminProtect>
+            <AddPublisher></AddPublisher>
+          </AdminProtect>
+        ),
+      },
+    ],
   },
 ]);
-
 
 export default router;

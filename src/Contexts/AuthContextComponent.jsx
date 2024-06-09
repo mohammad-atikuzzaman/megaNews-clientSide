@@ -9,7 +9,7 @@ import {
 } from "firebase/auth";
 import { createContext, useEffect, useState } from "react";
 import auth from "../firebase.init";
-import axios from "axios";
+import useAxuisPublic from "../Hooks/useAxuisPublic";
 
 export const AuthContext = createContext(null);
 const googleProvider = new GoogleAuthProvider();
@@ -17,6 +17,7 @@ const googleProvider = new GoogleAuthProvider();
 const AuthContextComponent = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const axiosPublic = useAxuisPublic();
 
   const registerWithEmailPass = (email, password) => {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -48,32 +49,23 @@ const AuthContextComponent = ({ children }) => {
       const logedUser = { email };
       setLoading(false);
       if (currentUser) {
-        axios
-          .post("http://localhost:5000/jwt", logedUser, {
+        axiosPublic
+          .post("/jwt", logedUser, {
             withCredentials: true,
           })
           .then((res) => {
-            if (res.data.success) {
-              // console.log("jwt res :", res);
+            if (res.data.token) {
+              // console.log(res.data.token);
+              localStorage.setItem("userToken", res.data.token);
             }
-          })
-          .catch((err) => console.log(err));
-      } else {
-        axios
-          .post("http://localhost:5000/logout", logedUser, {
-            withCredentials: true,
-          })
-          .then((res) => {
-            // console.log(res.data);
-          })
-          .catch((err) => {
-            console.log(err);
           });
+      } else {
+        localStorage.removeItem("userToken");
       }
     });
 
     return () => unSubscribe();
-  }, [user]);
+  }, [axiosPublic, user]);
 
   const context = {
     user,

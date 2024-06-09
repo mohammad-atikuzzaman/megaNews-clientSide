@@ -1,4 +1,4 @@
-import { FaUsers } from "react-icons/fa";
+import { FaRepublican, FaUsers } from "react-icons/fa";
 import { MdArticle } from "react-icons/md";
 import { NavLink, Outlet } from "react-router-dom";
 
@@ -14,6 +14,10 @@ const DashBoard = () => {
           <li className="flex items-center gap-3 p-2">
             <MdArticle></MdArticle>
             <NavLink to="/dashboard/all-article">All Article</NavLink>
+          </li>
+          <li className="flex items-center gap-3 p-2">
+            <FaRepublican></FaRepublican>
+            <NavLink to="/dashboard/add-publisher">Add Publisher</NavLink>
           </li>
           <hr className="mx-3"/>
           <li className="flex items-center gap-3 p-2">

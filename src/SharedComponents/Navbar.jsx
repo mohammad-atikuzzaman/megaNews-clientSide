@@ -4,11 +4,15 @@ import { Link, NavLink } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 import LoadingScreen from "./LoadingScreen";
 import { toast } from "react-toastify";
+import useAdmin from "../Hooks/useAdmin";
 
 const Navbar = () => {
   const [disMobMenu, setDisMobMenu] = useState(false);
   const [disMobProfile, setDisMobProfile] = useState(false);
   const { user, logOut, loading } = useAuth();
+  const [isAdmin]= useAdmin()
+  const isPremium = true
+
   const menu = (
     <>
       <li>
@@ -55,7 +59,8 @@ const Navbar = () => {
           Subscription
         </NavLink>
       </li>
-      <li>
+      {
+        isAdmin ? <li>
         <NavLink
           className={({ isActive }) =>
             isActive
@@ -65,7 +70,21 @@ const Navbar = () => {
           to="/dashboard">
           Dashboard
         </NavLink>
-      </li>
+      </li> : ""
+      }
+      {
+        isPremium ? <li>
+        <NavLink
+          className={({ isActive }) =>
+            isActive
+              ? "text-violet-400 border- border-b-2 border-violet-400 md:p-2"
+              : ""
+          }
+          to="/dashboard">
+          Premium Article
+        </NavLink>
+      </li> : ""
+      }
       <li>
         <NavLink
           className={({ isActive }) =>
@@ -79,7 +98,6 @@ const Navbar = () => {
       </li>
     </>
   );
-
   const handleLogOut =()=>{
      logOut()
      .then(() =>{
@@ -100,7 +118,7 @@ const Navbar = () => {
                 className="p-4 md:hidden">
                 <IoMenu className="text-2xl"></IoMenu>
               </button>
-              <div className="absolute md:hidden">
+              <div className="absolute md:hidden z-10">
                 <ul
                   className={
                     disMobMenu
@@ -137,7 +155,7 @@ const Navbar = () => {
                       className={`w-10 h-10 rounded-full ring-2 ring-offset-4 dark:bg-gray-500 dark:ring-violet-600 dark:ring-offset-gray-100`}
                       src={user?.photoURL}
                     />
-                    <div className="absolute right-0 md:-right-24">
+                    <div className="absolute right-0 md:-right-24 z-10">
                       <ul
                         className={
                           disMobProfile

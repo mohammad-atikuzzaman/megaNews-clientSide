@@ -8,7 +8,7 @@ const Users = () => {
   const [users, refetch]= useUsers()
 
   const handleMakeAdmin =(email, name)=>{
-    axiosPriver.patch(`/users/${email}`, {isAdmin: true})
+    axiosPriver.patch(`/users/${email}`, {role: "admin"})
     .then(res =>{
       console.log(res.data)
       if(res.data.modifiedCount > 0){
@@ -53,7 +53,7 @@ const Users = () => {
                   />
                 </td>
                 <td>
-                  {user?.isAdmin ? (
+                  {user?.role === 'admin' ? (
                     "admin"
                   ) : (
                     <button onClick={() =>handleMakeAdmin(user.userEmail, user.userName)} className="bg-violet-500 px-3 py-2 rounded-md text-gray-900 font-semibold">
