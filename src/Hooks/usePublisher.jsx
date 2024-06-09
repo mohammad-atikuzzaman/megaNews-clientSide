@@ -1,10 +1,8 @@
 
 import axios from 'axios';
-import useAxiosPrivet from './useAxiosPrivet';
 import { useQuery } from '@tanstack/react-query';
 
 const usePublisher = () => {
- const axiosSecure = useAxiosPrivet();
  const { data: publishers = [], refetch } = useQuery({
    queryKey: ["users"],
    queryFn: async () => {

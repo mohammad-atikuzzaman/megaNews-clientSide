@@ -6,6 +6,7 @@ import Select from "react-select";
 import { useState } from "react";
 import Swal from "sweetalert2";
 import usePublisher from "../Hooks/usePublisher";
+import moment from "moment";
 
 const imageHostingKey = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const imageHostingApi = `https://api.imgbb.com/1/upload?key=${imageHostingKey}`;
@@ -18,26 +19,19 @@ const options = [
 
 const AddArticle = () => {
   const [publishers] = usePublisher();
-  console.log(publishers);
   const [selectedOption, setSelectedOption] = useState([]);
-  const [selectedPublisher, setSelectedPublisher] = useState([]);
-
-
-  // console.log(selectedOption)
-  // console.log(selectedPublisher)
-
-
-
   const axiosSecure = useAxiosPrivet();
   const {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm();
   const { user } = useAuth();
 
   const onSubmit = async (data) => {
+     const date = moment().format("LL"); 
     const imageFile = { image: data.file[0] };
     const res = await axios.post(imageHostingApi, imageFile, {
       headers: {
@@ -46,8 +40,20 @@ const AddArticle = () => {
     });
     // console.log(res.data, "img data");
     if (res.data.success) {
-      const publisherInfo = {};
-      // console.log(publisherInfo);
+      const publisherInfo = {
+        title: data.title,
+        detail: data.description,
+        image: res.data.data.display_url,
+        publisher: data.selectPub,
+        tags: selectedOption,
+        authorName: user?.displayName,
+        authorEmail: user?.email,
+        authorPhoto: user?.photoURL,
+        postedDate: date,
+        status: "pending"
+      };
+      console.log(publisherInfo);
+
       axiosSecure.post("/add-article", publisherInfo).then((dbRes) => {
         if (dbRes.data.insertedId) {
           Swal.fire({
@@ -136,7 +142,10 @@ const AddArticle = () => {
                   </div>
                 </div>
 
-                <div className="col-span-full sm:col-span-3">
+                <div className="col-span-full text-black sm:col-span-3">
+                  <label className="block text-white text-lg font-medium">
+                    Please select tags
+                  </label>
                   <Select
                     defaultValue={selectedOption}
                     onChange={setSelectedOption}
@@ -144,14 +153,28 @@ const AddArticle = () => {
                     isMulti={true}
                   />
                 </div>
-                <div className="col-span-full sm:col-span-2">
-                  <Select
-                    defaultValue={selectedPublisher}
-                    onChange={setSelectedPublisher}
-                    options={publishers}
-                    isMulti={true}
-                  />
+                <div className="col-span-full sm:col-span-2 text-black">
+                  <label
+                    htmlFor="publisher"
+                    className="block text-white text-lg font-medium">
+                    Please select a publisher
+                  </label>
+                  <select
+                    id="publisher"
+                    {...register("selectPub")}
+                    className="w-full p-2 rounded-md">
+                    {publishers.map((pub) => (
+                      <option key={pub._id} value={pub.publisherName}>
+                        {pub.publisherName}
+                      </option>
+                    ))}
+                  </select>
                 </div>
+                <input
+                  type="submit"
+                  value="Submit"
+                  className="mx-auto bg-violet-400 w-full col-span-5 p-2 rounded-md text-semibold cursor-pointer"
+                />
               </div>
             </fieldset>
           </form>

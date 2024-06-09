@@ -14,6 +14,7 @@ import DashBoard from "./DashBoard";
 import Users from "./Pages/Users";
 import AdminProtect from "./UsersProtect/AdminProtect";
 import AddPublisher from "./Pages/AddPublisher";
+import AllArticleAdmin from "./Pages/AllArticleAdmin";
 
 const router = createBrowserRouter([
   {
@@ -87,7 +88,7 @@ const router = createBrowserRouter([
         path: "all-article",
         element: (
           <AdminProtect>
-            <AllArticle></AllArticle>
+            <AllArticleAdmin></AllArticleAdmin>
           </AdminProtect>
         ),
       },
