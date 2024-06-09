@@ -24,7 +24,7 @@ const Register = () => {
   } = useForm();
   const navigate = useNavigate();
 
-  
+
   const onSubmit = async (data) => {
     setSpiner(true);
     const imageFile = { image: data.file[0] };
@@ -186,7 +186,7 @@ const Register = () => {
                 accept="image/*"
                 className=" border-2 border-dashed border-gray-700 w-full rounded-md "
               />
-              {errors.user && (
+              {errors.file && (
                 <span className="text-red-500 text-sm">
                   This field is required
                 </span>

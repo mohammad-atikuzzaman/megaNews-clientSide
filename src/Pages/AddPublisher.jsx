@@ -70,7 +70,7 @@ const AddPublisher = () => {
                 placeholder="Publisher Name"
                 className="w-full px-3 py-2 border rounded-md border-gray-700 bg-gray-200"
               />
-              {errors.user && (
+              {errors.name && (
                 <span className="text-red-500 text-sm">
                   Publisher Name is required
                 </span>
@@ -88,7 +88,7 @@ const AddPublisher = () => {
                   accept="image/*"
                   className=" border-2 p-1 border-dashed border-gray-700 w-full rounded-md "
                 />
-                {errors.user && (
+                {errors.file && (
                   <span className="text-red-500 text-sm">
                     This field is required
                   </span>
