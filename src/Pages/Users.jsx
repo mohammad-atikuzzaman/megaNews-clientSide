@@ -1,25 +1,30 @@
-import { useEffect, useState } from "react";
+
+import Swal from "sweetalert2";
 import useAxiosPrivet from "../Hooks/useAxiosPrivet";
+import useUsers from "../Hooks/useUsers";
 
 const Users = () => {
-  const isAdmin = false;
-  const [users, setUsers]= useState([])
   const axiosPriver = useAxiosPrivet();
+  const [users, refetch]= useUsers()
 
-  useEffect(() => {
-    axiosPriver.get("/users").then((res) => {
-      // console.log(res.data);
-      setUsers(res.data)
-    });
-  }, []);
-
-  const handleMakeAdmin =(email)=>{
-    console.log(email)
+  const handleMakeAdmin =(email, name)=>{
     axiosPriver.patch(`/users/${email}`, {isAdmin: true})
-    .then(res => console.log(res.data))
-    .catch(err => console.error(err))
+    .then(res =>{
+      console.log(res.data)
+      if(res.data.modifiedCount > 0){
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: `${name} is Now admin`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        refetch()
+      }
+
+    })
   }
-  console.log(users)
+  
   return (
     <div>
       <h2 className="font-bold text-3xl ">All users</h2>
@@ -36,7 +41,7 @@ const Users = () => {
           </thead>
           <tbody className="border border-t-gray-800">
             {users.map((user, index) => (
-              <tr key={user._id}>
+              <tr key={user._id} className={index%2 ===1 ? "bg-gray-300": "bg-gray-400"}>
                 <td>{index + 1}</td>
                 <td>{user.userName}</td>
                 <td>{user.userEmail}</td>
@@ -51,7 +56,7 @@ const Users = () => {
                   {user?.isAdmin ? (
                     "admin"
                   ) : (
-                    <button onClick={() =>handleMakeAdmin(user.userEmail)} className="bg-violet-500 px-3 py-2 rounded-md text-gray-900 font-semibold">
+                    <button onClick={() =>handleMakeAdmin(user.userEmail, user.userName)} className="bg-violet-500 px-3 py-2 rounded-md text-gray-900 font-semibold">
                       Make Admin
                     </button>
                   )}
