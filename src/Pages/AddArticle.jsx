@@ -25,20 +25,25 @@ const AddArticle = () => {
     register,
     handleSubmit,
     reset,
-    watch,
     formState: { errors },
   } = useForm();
   const { user } = useAuth();
 
   const onSubmit = async (data) => {
-     const date = moment().format("LL"); 
+    const date = moment().format("LL");
     const imageFile = { image: data.file[0] };
     const res = await axios.post(imageHostingApi, imageFile, {
       headers: {
         "content-type": "multipart/form-data",
       },
     });
-    // console.log(res.data, "img data");
+    Swal.fire({
+      position: "center",
+      icon: "info",
+      title: "Please wait",
+      showConfirmButton: false,
+      timer: 1500,
+    });
     if (res.data.success) {
       const publisherInfo = {
         title: data.title,
@@ -50,9 +55,10 @@ const AddArticle = () => {
         authorEmail: user?.email,
         authorPhoto: user?.photoURL,
         postedDate: date,
-        status: "pending"
+        status: "pending",
+        views: 0,
       };
-      console.log(publisherInfo);
+      // console.log(publisherInfo);
 
       axiosSecure.post("/add-article", publisherInfo).then((dbRes) => {
         if (dbRes.data.insertedId) {

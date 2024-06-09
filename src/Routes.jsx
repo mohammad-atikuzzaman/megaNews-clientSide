@@ -15,6 +15,7 @@ import Users from "./Pages/Users";
 import AdminProtect from "./UsersProtect/AdminProtect";
 import AddPublisher from "./Pages/AddPublisher";
 import AllArticleAdmin from "./Pages/AllArticleAdmin";
+import DetailsArticle from "./Pages/DetailsArticle";
 
 const router = createBrowserRouter([
   {
@@ -45,6 +46,10 @@ const router = createBrowserRouter([
       {
         path: "/all-articles",
         element: <AllArticle></AllArticle>,
+      },
+      {
+        path: "/article-details/:id",
+        element: <DetailsArticle></DetailsArticle>,
       },
       {
         path: "/subscription",

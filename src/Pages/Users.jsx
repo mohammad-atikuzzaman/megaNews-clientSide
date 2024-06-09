@@ -27,8 +27,8 @@ const Users = () => {
   
   return (
     <div>
-      <h2 className="font-bold text-3xl ">All users</h2>
-      <div className="bg-gray-200 p-6 mt-10">
+      <h2 className="font-bold text-3xl p-6 bg-gray-500 ml-1">All users</h2>
+      <div className="mt-4">
         <table className="w-full text-center">
           <thead>
             <tr>
@@ -53,7 +53,7 @@ const Users = () => {
                   />
                 </td>
                 <td>
-                  {user?.role === 'admin' ? (
+                  {user?.role === 'admi' ? (
                     "admin"
                   ) : (
                     <button onClick={() =>handleMakeAdmin(user.userEmail, user.userName)} className="bg-violet-500 px-3 py-2 rounded-md text-gray-900 font-semibold">
