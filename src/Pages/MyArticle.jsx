@@ -1,19 +1,39 @@
-import { useEffect, useState } from "react";
 import useAxiosPrivet from "../Hooks/useAxiosPrivet";
 import useAuth from "../Hooks/useAuth";
 import { FaDotCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import Swal from "sweetalert2";
 
 const MyArticle = () => {
-  const [allArticle, setArticles] = useState([]);
   const { user } = useAuth();
   const axiosSecure = useAxiosPrivet();
-  useEffect(() => {
-    axiosSecure.get(`/authors-article/${user?.email}`).then((res) => {
+
+  const { data: allArticle = [], refetch } = useQuery({
+    queryKey: ["allArticleData"],
+    queryFn: async () => {
+      const res = await axiosSecure(`/authors-article/${user?.email}`);
+      return res.data;
+    },
+  });
+  // console.log("all article", allArticle);
+  const handleDelete = (id) => {
+    console.log(id);
+    axiosSecure.delete(`/delete-article/${id}`).then((res) => {
       // console.log(res.data);
-      setArticles(res.data);
+      refetch();
+      if (res.data.deletedCount > 0) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Article Deleted",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
     });
-  }, [axiosSecure, user?.email]);
+  };
+
   return (
     <div className="container mx-auto">
       <h2 className="text-3xl text-center font-bold my-6">My Articles</h2>
@@ -38,26 +58,26 @@ const MyArticle = () => {
                 <td>{index + 1}</td>
                 <td>{article.title}</td>
                 <td>
-                  <Link to={`/article-details/${article._id}`}>
+                  <Link to={`/article-details/${article?._id}`}>
                     <button className="bg-gray-500 p-1 rounded-lg text-white hover:scale-105 transition-all">
                       Details
                     </button>
                   </Link>
                 </td>
                 <td>
-                  {article.status === "approved" && (
+                  {article?.status === "approved" && (
                     <div className="text-green-700 flex items-center gap-2 justify-center">
                       <FaDotCircle></FaDotCircle>
                       {article.status}
                     </div>
                   )}
-                  {article.status === "declined" && (
+                  {article?.status === "declined" && (
                     <div className="text-orange-700 flex items-center gap-2">
                       <FaDotCircle></FaDotCircle>
                       {article.status}
                     </div>
                   )}
-                  {article.status === "pending" && (
+                  {article?.status === "pending" && (
                     <div className="text-yellow-400 flex items-center gap-2">
                       <FaDotCircle></FaDotCircle>
                       {article.status}
@@ -73,14 +93,16 @@ const MyArticle = () => {
                 </td>
 
                 <td>
-                  <Link to={`/article-update/${article._id}`}>
+                  <Link to={`/article-update/${article?._id}`}>
                     <button className="p-2 bg-orange-800  text-white rounded-md">
                       Update
                     </button>
                   </Link>
                 </td>
                 <td>
-                  <button className="p-2 bg-red-700 text-white rounded-md">
+                  <button
+                    onClick={() => handleDelete(article?._id)}
+                    className="p-2 bg-red-700 text-white rounded-md">
                     Delete
                   </button>
                 </td>
