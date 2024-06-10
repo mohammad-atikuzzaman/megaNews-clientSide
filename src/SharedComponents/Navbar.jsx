@@ -5,13 +5,14 @@ import useAuth from "../Hooks/useAuth";
 import LoadingScreen from "./LoadingScreen";
 import { toast } from "react-toastify";
 import useAdmin from "../Hooks/useAdmin";
+import useUserPremiam from "../Hooks/useUserPremiam";
 
 const Navbar = () => {
   const [disMobMenu, setDisMobMenu] = useState(false);
   const [disMobProfile, setDisMobProfile] = useState(false);
   const { user, logOut, loading } = useAuth();
-  const [isAdmin]= useAdmin()
-  const isPremium = true
+  const [isAdmin] = useAdmin();
+  const [isPremium] = useUserPremiam();
 
   const menu = (
     <>
@@ -59,32 +60,36 @@ const Navbar = () => {
           Subscription
         </NavLink>
       </li>
-      {
-        isAdmin ? <li>
-        <NavLink
-          className={({ isActive }) =>
-            isActive
-              ? "text-violet-400 border- border-b-2 border-violet-400 md:p-2"
-              : ""
-          }
-          to="/dashboard">
-          Dashboard
-        </NavLink>
-      </li> : ""
-      }
-      {
-        isPremium ? <li>
-        <NavLink
-          className={({ isActive }) =>
-            isActive
-              ? "text-violet-400 border- border-b-2 border-violet-400 md:p-2"
-              : ""
-          }
-          to="/dashboard">
-          Premium Article
-        </NavLink>
-      </li> : ""
-      }
+      {isAdmin ? (
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "text-violet-400 border- border-b-2 border-violet-400 md:p-2"
+                : ""
+            }
+            to="/dashboard">
+            Dashboard
+          </NavLink>
+        </li>
+      ) : (
+        ""
+      )}
+      {isPremium ? (
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "text-violet-400 border- border-b-2 border-violet-400 md:p-2"
+                : ""
+            }
+            to="/premium-articles">
+            Premium Article
+          </NavLink>
+        </li>
+      ) : (
+        ""
+      )}
       <li>
         <NavLink
           className={({ isActive }) =>
@@ -98,15 +103,15 @@ const Navbar = () => {
       </li>
     </>
   );
-  const handleLogOut =()=>{
-     logOut()
-     .then(() =>{
-      toast.warn("Account logged out")
-     })
-     .catch(err =>{
-      toast.error(`${err.message}`)
-     })
-  }
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {
+        toast.warn("Account logged out");
+      })
+      .catch((err) => {
+        toast.error(`${err.message}`);
+      });
+  };
   return (
     <header className="p-2 bg-gray-800 text-gray-100">
       <div className="container flex items-center justify-between h-16 mx-auto">

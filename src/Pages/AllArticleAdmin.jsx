@@ -44,11 +44,27 @@ const AllArticleAdmin = () => {
         refetch();
       });
   };
+  const handleMakePremium = (id) => {
+    console.log("make premium", id);
+    axiosSecure.patch(`/my-article/${id}`, { type: "premium" }).then((res) => {
+      console.log(res.data);
+      if (res.data.modifiedCount > 0) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Now article is premium",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+      refetch();
+    });
+  };
   return (
     <div>
       <h2 className="font-bold text-3xl p-6 bg-gray-500 ml-1">All Articles</h2>
-      <div className="mt-4">
-        <table className="w-full text-center">
+      <div className="mt-4 overflow-x-scroll">
+        <table className="w-full text-center ">
           <thead>
             <tr>
               <th>#</th>
@@ -58,7 +74,7 @@ const AllArticleAdmin = () => {
               <th>Photo</th>
               <th>Posted Date</th>
               <th>Status</th>
-              <th colSpan={3}>-------Action-------</th>
+              <th colSpan={4}>-------Action-------</th>
             </tr>
           </thead>
           <tbody className="border border-t-gray-800">
@@ -125,6 +141,18 @@ const AllArticleAdmin = () => {
                 <td>
                   <button className="p-2 bg-red-700 text-white rounded-md">
                     Delete
+                  </button>
+                </td>
+                <td>
+                  <button
+                    onClick={() => handleMakePremium(article._id)}
+                    disabled={article.type === "premium"}
+                    className={
+                      article.type === "premium"
+                        ? "p-2 bg-gray-500  text-white rounded-md"
+                        : "p-2 bg-orange-700  text-white rounded-md"
+                    }>
+                    Premium
                   </button>
                 </td>
               </tr>

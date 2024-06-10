@@ -10,8 +10,8 @@ const Carocel = () => {
   useState(() => {
     axiosPublic.get("/trending").then((res) => {
       setTrending(res.data);
-      console.log(res.data.length);
-      console.log(res.data);
+      // console.log(res.data.length);
+      // console.log(res.data);
     });
   }, []);
   return (

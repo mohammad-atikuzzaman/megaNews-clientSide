@@ -1,11 +1,18 @@
 import { FaNewspaper } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import useUserPremiam from "../Hooks/useUserPremiam";
 
 const ArticleCard = ({ article }) => {
-  // console.log(article);
-  const {_id, authorName, authorPhoto, title, details, image, publisher}= article;
+  const [isPremium] = useUserPremiam();
+  const { _id, authorName, authorPhoto, title, details, image, publisher } =
+    article;
   return (
-    <div className="rounded-md shadow-md sm:w-96 bg-gray-900 text-gray-100">
+    <div
+      className={
+        article?.type === "premium"
+          ? "rounded-md shadow-md bg-gray-900 text-yellow-600 border-4 border-yellow-600"
+          : "rounded-md shadow-md bg-gray-900 text-gray-100"
+      }>
       <div className="flex items-center justify-between p-3">
         <div className="flex items-center space-x-2">
           <img
@@ -33,7 +40,13 @@ const ArticleCard = ({ article }) => {
           <p>{title}</p>
         </div>
         <Link to={`/article-details/${_id}`}>
-          <button className="w-full bg-violet-400 p-2 rounded-md">
+          <button
+            disabled={article?.type ==="premium" ? isPremium? false : true :false}
+            className={
+              article?.type === "premium"
+                ? "w-full bg-yellow-700 text-white p-2 rounded-md"
+                : "w-full bg-violet-400 p-2 rounded-md"
+            }>
             Details
           </button>
         </Link>

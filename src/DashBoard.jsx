@@ -5,7 +5,7 @@ import { NavLink, Outlet } from "react-router-dom";
 const DashBoard = () => {
   return (
     <div className="flex container mx-auto bg-gray-100">
-      <div className="w-[15%] bg-gray-500">
+      <div className="md:w-[15%] bg-gray-500">
         <ul className=" h-screen max-w-full space-y-2 font-serif text-xl">
           <li className="flex items-center gap-3 p-2">
             <FaUsers></FaUsers>
@@ -26,7 +26,7 @@ const DashBoard = () => {
         </ul>
       </div>
 
-      <div className="flex-1">
+      <div className="flex-1 md:w-[85%]">
         <Outlet></Outlet>
       </div>
     </div>

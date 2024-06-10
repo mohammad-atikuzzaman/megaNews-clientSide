@@ -16,6 +16,7 @@ import AdminProtect from "./UsersProtect/AdminProtect";
 import AddPublisher from "./Pages/AddPublisher";
 import AllArticleAdmin from "./Pages/AllArticleAdmin";
 import DetailsArticle from "./Pages/DetailsArticle";
+import PremiumArticles from "./Pages/PremiumArticles";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
       {
         path: "/all-articles",
         element: <AllArticle></AllArticle>,
+      },
+      {
+        path: "/premium-articles",
+        element: <PremiumArticles></PremiumArticles>,
       },
       {
         path: "/article-details/:id",

@@ -11,9 +11,8 @@ const AllArticle = () => {
       setArticles(res.data)
     })
   },[axiosSecure])
-  console.log(articles)
   return (
-    <div>
+    <div className='container mx-auto'>
       <h2 className='font-bold text-3xl text-center my-6'>All article</h2>
       <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
         {

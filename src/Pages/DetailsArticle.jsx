@@ -1,26 +1,40 @@
 import { useEffect, useState } from "react";
 import useAxuisPublic from "../Hooks/useAxuisPublic";
 import { useParams } from "react-router-dom";
+import useAuth from "../Hooks/useAuth";
+import LoadingScreen from "../SharedComponents/LoadingScreen";
 
 const DetailsArticle = () => {
+  const {user, setLoading, loading}= useAuth()
   const { id } = useParams();
   const [article, setArticle] = useState([]);
   const [tags, setTags] = useState([]);
   const axiosPublic = useAxuisPublic();
 
+  console.log(user?.email)
+
   useEffect(() => {
-    axiosPublic.get(`/article/${id}`).then((res) => {
-      setArticle(res.data);
-      const tags = res.data.tags;
-      setTags(tags);
-      console.log(res.data.views + 1)
-      axiosPublic
-        .patch(`/article/${id}`, { views: res.data.views + 1 })
-        .then((res) => {
-          console.log(res.data);
-        });
-    });
-  }, [axiosPublic, id]);
+     setLoading(true)
+    setTimeout(() => {
+          axiosPublic.get(`/article/${id}?email=${user?.email}`).then((res) => {
+            setArticle(res.data);
+            const tags = res.data.tags;
+            setTags(tags);
+            console.log(res.data.views + 1);
+            axiosPublic
+              .patch(`/article/${id}`, { views: res.data.views + 1 })
+              .then((res) => {
+                console.log(res.data);
+                setLoading(false)
+              });
+          });
+    }, 1000);
+
+  }, [axiosPublic, id, setLoading, user?.email]);
+
+  if(loading){
+    return <div className="w-full h-screen flex justify-center items-center"> <LoadingScreen></LoadingScreen></div>
+  }
 
   return (
     <div className="p-5 container mx-auto sm:p-10 md:p-16 bg-gray-800 text-gray-100 my-6">
