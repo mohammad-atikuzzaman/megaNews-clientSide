@@ -68,9 +68,9 @@ const AllArticleAdmin = () => {
           <thead>
             <tr>
               <th>#</th>
-              <th>User Name</th>
+              <th>Title</th>
+              <th>Name</th>
               <th>Email</th>
-              <th>Profile</th>
               <th>Photo</th>
               <th>Posted Date</th>
               <th>Status</th>

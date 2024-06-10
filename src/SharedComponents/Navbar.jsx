@@ -27,17 +27,19 @@ const Navbar = () => {
           Home
         </NavLink>
       </li>
-      <li>
-        <NavLink
-          className={({ isActive }) =>
-            isActive
-              ? "text-violet-400 border- border-b-2 border-violet-400 md:p-2"
-              : ""
-          }
-          to="/add-article">
-          Add Articles
-        </NavLink>
-      </li>
+      {user && (
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "text-violet-400 border- border-b-2 border-violet-400 md:p-2"
+                : ""
+            }
+            to="/add-article">
+            Add Articles
+          </NavLink>
+        </li>
+      )}
       <li>
         <NavLink
           className={({ isActive }) =>
@@ -49,17 +51,19 @@ const Navbar = () => {
           All Articles
         </NavLink>
       </li>
-      <li>
-        <NavLink
-          className={({ isActive }) =>
-            isActive
-              ? "text-violet-400 border- border-b-2 border-violet-400 md:p-2"
-              : ""
-          }
-          to="/subscription">
-          Subscription
-        </NavLink>
-      </li>
+      {user && (
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "text-violet-400 border- border-b-2 border-violet-400 md:p-2"
+                : ""
+            }
+            to="/subscription">
+            Subscription
+          </NavLink>
+        </li>
+      )}
       {isAdmin ? (
         <li>
           <NavLink
@@ -90,17 +94,19 @@ const Navbar = () => {
       ) : (
         ""
       )}
-      <li>
-        <NavLink
-          className={({ isActive }) =>
-            isActive
-              ? "text-violet-400 border- border-b-2 border-violet-400 md:p-2"
-              : ""
-          }
-          to="/my-articles">
-          My Articles
-        </NavLink>
-      </li>
+      {user && (
+        <li>
+          <NavLink
+            className={({ isActive }) =>
+              isActive
+                ? "text-violet-400 border- border-b-2 border-violet-400 md:p-2"
+                : ""
+            }
+            to="/my-articles">
+            My Articles
+          </NavLink>
+        </li>
+      )}
     </>
   );
   const handleLogOut = () => {
