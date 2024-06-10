@@ -1,13 +1,12 @@
 import axios from "axios";
-import useAuth from "../Hooks/useAuth";
 import useAxiosPrivet from "../Hooks/useAxiosPrivet";
 import { useForm } from "react-hook-form";
 import Select from "react-select";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Swal from "sweetalert2";
 import usePublisher from "../Hooks/usePublisher";
-import moment from "moment";
 import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
 const imageHostingKey = import.meta.env.VITE_IMAGE_HOSTING_KEY;
 const imageHostingApi = `https://api.imgbb.com/1/upload?key=${imageHostingKey}`;
@@ -17,9 +16,8 @@ const options = [
   { value: "strawberry", label: "Strawberry" },
   { value: "vanilla", label: "Vanilla" },
 ];
-
 const UpdateArticle = () => {
-  const {id}= useParams()
+  const { id } = useParams();
   const [publishers] = usePublisher();
   const [selectedOption, setSelectedOption] = useState([]);
   const axiosSecure = useAxiosPrivet();
@@ -29,26 +27,21 @@ const UpdateArticle = () => {
     reset,
     formState: { errors },
   } = useForm();
-  const { user } = useAuth();
 
-  // useEffect(()=>{
-  //   axiosSecure.get("/")
-  // },[])
+  const { data: article } = useQuery({
+    queryKey: ["articleData"],
+    queryFn: async () => {
+      const res = await axiosSecure(`/article/${id}`);
+      return res.data;
+    },
+  });
 
   const onSubmit = async (data) => {
-    const date = moment().format("LL");
     const imageFile = { image: data.file[0] };
     const res = await axios.post(imageHostingApi, imageFile, {
       headers: {
         "content-type": "multipart/form-data",
       },
-    });
-    Swal.fire({
-      position: "center",
-      icon: "info",
-      title: "Please wait",
-      showConfirmButton: false,
-      timer: 1500,
     });
     if (res.data.success) {
       const publisherInfo = {
@@ -57,53 +50,41 @@ const UpdateArticle = () => {
         image: res.data.data.display_url,
         publisher: data.selectPub,
         tags: selectedOption,
-        authorName: user?.displayName,
-        authorEmail: user?.email,
-        authorPhoto: user?.photoURL,
-        postedDate: date,
-        status: "pending",
-        views: 0,
       };
-      // console.log(publisherInfo);
-
-      axiosSecure.post("/add-article", publisherInfo).then((dbRes) => {
-        if (dbRes.data.insertedId) {
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "Article added",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-          reset();
-        }
-      });
+      axiosSecure
+        .patch(`/update-article/${id}`, publisherInfo)
+        .then((dbRes) => {
+          if (dbRes.data.modifiedCount > 0) {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: "Article updated",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            reset();
+          }
+        });
     }
   };
 
-
   return (
     <div>
-      <h2 className="font-bold text-4xl text-center">Please add a article</h2>
+      <h2 className="font-bold text-4xl text-center">Update Your Article</h2>
       <div>
         <section className="p-6 bg-gray-800 text-gray-50">
           <form
             onSubmit={handleSubmit(onSubmit)}
             className="container flex flex-col mx-auto space-y-12">
-            <fieldset className="grid grid-cols-4 gap-6 p-6 rounded-md shadow-sm bg-gray-900">
-              <div className="space-y-2 col-span-full lg:col-span-1">
-                <p className="font-medium">For Sharing Knowledge</p>
-                <p className="text-xs">
-                  Please join us and make a post to share a article.
-                </p>
-              </div>
+            <fieldset className=" p-6 rounded-md shadow-sm bg-gray-900">
               <div className="grid grid-cols-6 gap-4 col-span-full lg:col-span-3">
                 <div className="col-span-full">
                   <label htmlFor="title" className="text-sm">
-                    First name
+                    Title
                   </label>
                   <input
                     id="title"
+                    defaultValue={article?.title}
                     type="text"
                     {...register("title", { required: true })}
                     placeholder="Article Tile"
@@ -121,6 +102,7 @@ const UpdateArticle = () => {
                   </label>
                   <input
                     id="description"
+                    defaultValue={article?.detail}
                     type="text"
                     {...register("description", { required: true })}
                     placeholder="Article Description"
@@ -167,7 +149,7 @@ const UpdateArticle = () => {
                     isMulti={true}
                   />
                 </div>
-                <div className="col-span-full sm:col-span-2 text-black">
+                <div className="col-span-full sm:col-span-3 text-black">
                   <label
                     htmlFor="publisher"
                     className="block text-white text-lg font-medium">
@@ -187,7 +169,7 @@ const UpdateArticle = () => {
                 <input
                   type="submit"
                   value="Submit"
-                  className="mx-auto bg-violet-400 w-full col-span-5 p-2 rounded-md text-semibold cursor-pointer"
+                  className="mx-auto bg-violet-400 w-full col-span-6 p-2 rounded-md text-semibold cursor-pointer"
                 />
               </div>
             </fieldset>
