@@ -18,9 +18,7 @@ const MyArticle = () => {
   });
   // console.log("all article", allArticle);
   const handleDelete = (id) => {
-    console.log(id);
     axiosSecure.delete(`/delete-article/${id}`).then((res) => {
-      // console.log(res.data);
       refetch();
       if (res.data.deletedCount > 0) {
         Swal.fire({

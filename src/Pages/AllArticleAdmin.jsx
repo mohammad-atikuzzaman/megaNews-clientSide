@@ -60,6 +60,21 @@ const AllArticleAdmin = () => {
       refetch();
     });
   };
+
+    const handleDelete = (id) => {
+      axiosSecure.delete(`/delete-article/${id}`).then((res) => {
+        refetch();
+        if (res.data.deletedCount > 0) {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Article Deleted",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      });
+    };
   return (
     <div>
       <h2 className="font-bold text-3xl p-6 bg-gray-500 ml-1">All Articles</h2>
@@ -83,43 +98,43 @@ const AllArticleAdmin = () => {
                 key={article._id}
                 className={index % 2 === 1 ? "bg-gray-300" : "bg-gray-400"}>
                 <td>{index + 1}</td>
-                <td>{article.title}</td>
-                <td>{article.authorName}</td>
-                <td>{article.authorEmail}</td>
+                <td>{article?.title}</td>
+                <td>{article?.authorName}</td>
+                <td>{article?.authorEmail}</td>
                 <td>
                   <img
-                    src={article.authorPhoto}
+                    src={article?.authorPhoto}
                     alt=""
                     className="w-12 h-12 rounded-full mx-auto"
                   />
                 </td>
-                <td>{article.postedDate}</td>
+                <td>{article?.postedDate}</td>
                 <td>
-                  {article.status === "approved" && (
+                  {article?.status === "approved" && (
                     <div className="text-green-700 flex items-center gap-2">
                       <FaDotCircle></FaDotCircle>
-                      {article.status}
+                      {article?.status}
                     </div>
                   )}
-                  {article.status === "declined" && (
+                  {article?.status === "declined" && (
                     <div className="text-orange-700 flex items-center gap-2">
                       <FaDotCircle></FaDotCircle>
-                      {article.status}
+                      {article?.status}
                     </div>
                   )}
-                  {article.status === "pending" && (
+                  {article?.status === "pending" && (
                     <div className="text-yellow-400 flex items-center gap-2">
                       <FaDotCircle></FaDotCircle>
-                      {article.status}
+                      {article?.status}
                     </div>
                   )}
                 </td>
                 <td>
                   <button
-                    onClick={() => handleApprove(article._id)}
-                    disabled={article.status === "approved" ? true : false}
+                    onClick={() => handleApprove(article?._id)}
+                    disabled={article?.status === "approved" ? true : false}
                     className={
-                      article.status === "approved"
+                      article?.status === "approved"
                         ? "p-2 bg-gray-500  text-white rounded-md"
                         : "p-2 bg-green-700  text-white rounded-md"
                     }>
@@ -128,10 +143,10 @@ const AllArticleAdmin = () => {
                 </td>
                 <td>
                   <button
-                    onClick={() => handleDecline(article._id)}
-                    disabled={article.status === "declined"}
+                    onClick={() => handleDecline(article?._id)}
+                    disabled={article?.status === "declined"}
                     className={
-                      article.status === "declined"
+                      article?.status === "declined"
                         ? "p-2 bg-gray-500  text-white rounded-md"
                         : "p-2 bg-orange-700  text-white rounded-md"
                     }>
@@ -139,16 +154,16 @@ const AllArticleAdmin = () => {
                   </button>
                 </td>
                 <td>
-                  <button className="p-2 bg-red-700 text-white rounded-md">
+                  <button onClick={()=> handleDelete(article?._id)} className="p-2 bg-red-700 text-white rounded-md">
                     Delete
                   </button>
                 </td>
                 <td>
                   <button
-                    onClick={() => handleMakePremium(article._id)}
-                    disabled={article.type === "premium"}
+                    onClick={() => handleMakePremium(article?._id)}
+                    disabled={article?.type === "premium"}
                     className={
-                      article.type === "premium"
+                      article?.type === "premium"
                         ? "p-2 bg-gray-500  text-white rounded-md"
                         : "p-2 bg-orange-700  text-white rounded-md"
                     }>
