@@ -6,6 +6,7 @@ import useAuth from "../Hooks/useAuth";
 import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import useAxuisPublic from "../Hooks/useAxuisPublic";
+import useAxiosPrivet from "../Hooks/useAxiosPrivet";
 
 const Login = () => {
   const [displayPass, setDisplayPass] = useState(true);
@@ -18,9 +19,11 @@ const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const axiosPublic = useAxuisPublic();
+  const axiosSecure = useAxiosPrivet();
 
   const onSubmit = async (data) => {
     const { email, password } = data;
+
     logInWithEmailPass(email, password)
       .then((res) => {
         // console.log(res.user.displayName);
@@ -31,6 +34,32 @@ const Login = () => {
           title: `${res.user.displayName} login successful`,
           showConfirmButton: false,
           timer: 1500,
+        });
+
+        axiosPublic.get(`/userPremium/${email}`).then((pRes) => {
+          console.log(pRes.data);
+          if (pRes.data?.type === "premium") {
+            const currentTime = new Date();
+            const planGetingTime = new Date(pRes.data?.timeOfGetPlan);
+
+            const differenceOfTime = currentTime - planGetingTime;
+            const minutes = differenceOfTime / (1000 * 60);
+            console.log("minute", minutes);
+            console.log("time", pRes.data?.planTime);
+
+            if (minutes > pRes.data?.planTime) {
+              console.log(" paici re vai");
+              axiosSecure
+                .patch(`/usersPremium/${email}`, {
+                  type: "",
+                  planTime: 0,
+                  timeOfGetPlan: "",
+                })
+                .then((rRes) => {
+                  console.log(rRes);
+                });
+            }
+          }
         });
 
         if (location?.state) {
@@ -54,6 +83,33 @@ const Login = () => {
           userEmail: res.user?.email,
           image: res.user?.photoURL,
         };
+        axiosPublic.get(`/userPremium/${res.user?.email}`).then((pRes) => {
+          console.log(pRes.data);
+
+          if (pRes.data?.type === "premium") {
+            const currentTime = new Date();
+            const planGetingTime = new Date(pRes.data?.timeOfGetPlan);
+
+            const differenceOfTime = currentTime - planGetingTime;
+            const minutes = differenceOfTime / (1000 * 60);
+
+            console.log("minute", minutes);
+            console.log("time", pRes.data?.planTime);
+            if (minutes > pRes.data?.planTime) {
+              console.log("paici re vai");
+              axiosSecure
+                .patch(`/usersPremium/${res.user?.email}`, {
+                  type: "",
+                  planTime: 0,
+                  timeOfGetPlan: "",
+                })
+                .then((rRes) => {
+                  console.log(rRes.data);
+                });
+            }
+          }
+        });
+
         axiosPublic
           .post("/users", userInfo)
           .then((res) => {
