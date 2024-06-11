@@ -1,6 +1,9 @@
 import { FaRepublican, FaUsers } from "react-icons/fa";
 import { MdArticle } from "react-icons/md";
 import { NavLink, Outlet } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 
 const DashBoard = () => {
   return (
@@ -29,6 +32,7 @@ const DashBoard = () => {
       <div className="flex-1 md:w-[85%]">
         <Outlet></Outlet>
       </div>
+      <ToastContainer/>
     </div>
   );
 };

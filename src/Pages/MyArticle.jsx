@@ -4,6 +4,8 @@ import { FaDotCircle } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
+import { useState } from "react";
+import { MdCancel } from "react-icons/md";
 
 const MyArticle = () => {
   const { user } = useAuth();
@@ -19,6 +21,7 @@ const MyArticle = () => {
   // console.log("all article", allArticle);
   const handleDelete = (id) => {
     axiosSecure.delete(`/delete-article/${id}`).then((res) => {
+      // console.log(res.data);
       refetch();
       if (res.data.deletedCount > 0) {
         Swal.fire({
@@ -31,11 +34,15 @@ const MyArticle = () => {
       }
     });
   };
+ 
+  const [reason, setReason] = useState("")
+  const [display, setDisplay]= useState(false)
+  console.log(reason)
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto ">
       <h2 className="text-3xl text-center font-bold my-6">My Articles</h2>
-      <div>
+      <div className="relative">
         <table className="w-full text-center">
           <thead>
             <tr>
@@ -43,6 +50,7 @@ const MyArticle = () => {
               <th>Title</th>
               <th>Details</th>
               <th>Status</th>
+              <th>Reason</th>
               <th>isPremium</th>
               <th>Update</th>
               <th>Delete</th>
@@ -70,16 +78,30 @@ const MyArticle = () => {
                     </div>
                   )}
                   {article?.status === "declined" && (
-                    <div className="text-orange-700 flex items-center gap-2">
+                    <div className="text-orange-700 flex items-center gap-2 justify-center">
                       <FaDotCircle></FaDotCircle>
                       {article.status}
                     </div>
                   )}
                   {article?.status === "pending" && (
-                    <div className="text-yellow-400 flex items-center gap-2">
+                    <div className="text-yellow-400 flex items-center gap-2 justify-center">
                       <FaDotCircle></FaDotCircle>
                       {article.status}
                     </div>
+                  )}
+                </td>
+                <td>
+                  {article?.status === "declined" ? (
+                    <button
+                      onClick={() =>{
+                         setReason(article?.reason);
+                         setDisplay(!display)
+                      } }
+                      className="bg-orange-500 text-white p-1 rounded-md ">
+                      See Reason
+                    </button>
+                  ) : (
+                    ""
                   )}
                 </td>
                 <td>
@@ -108,6 +130,14 @@ const MyArticle = () => {
             ))}
           </tbody>
         </table>
+        <div className={display ? "absolute top-0 w-full h-full  flex justify-center items-center bg-[#504f4f3b] ": "hidden"}>
+          <div className="bg-gray-800 p-6 w-[50%] mx-auto text-center text-white rounded-md">
+            <h2 className="text-xl">The reason</h2>
+            <hr />
+            <p>{reason}</p>
+            <button onClick={()=> setDisplay(!display)} className="mt-4"><MdCancel className="text-3xl"></MdCancel></button>
+          </div>
+        </div>
       </div>
     </div>
   );

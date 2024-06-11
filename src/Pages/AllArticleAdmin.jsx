@@ -1,12 +1,14 @@
-import axios from "axios";
 import useAllArticles from "../Hooks/useAllArticles";
 import useAxiosPrivet from "../Hooks/useAxiosPrivet";
 import Swal from "sweetalert2";
 import { FaDotCircle } from "react-icons/fa";
+import { useState } from "react";
+import { toast } from "react-toastify";
 
 const AllArticleAdmin = () => {
   const axiosSecure = useAxiosPrivet();
   const [allArticle, refetch] = useAllArticles();
+  const [display, setDisplay] = useState(false);
 
   const handleApprove = (id) => {
     console.log("approve", id);
@@ -26,10 +28,23 @@ const AllArticleAdmin = () => {
         refetch();
       });
   };
+
+  const [decId, setDecId] = useState(null);
   const handleDecline = (id) => {
-    console.log("decline", id);
+    // console.log("decline", id);
+    setDecId(id);
+    setDisplay(!display);
+  };
+  const handleDeclineSubmit = (e) => {
+    e.preventDefault();
+    console.log(decId);
+    const info = e.target.info.value
+    if(!info){
+      return toast.error("Please give any Feedback")
+    }
+    console.log(info)
     axiosSecure
-      .patch(`/my-article/${id}`, { status: "declined" })
+      .patch(`/my-article/${decId}`, { status: "declined",reason: info })
       .then((res) => {
         console.log(res.data);
         if (res.data.modifiedCount > 0) {
@@ -43,6 +58,7 @@ const AllArticleAdmin = () => {
         }
         refetch();
       });
+    setDisplay(!display);
   };
   const handleMakePremium = (id) => {
     console.log("make premium", id);
@@ -61,22 +77,22 @@ const AllArticleAdmin = () => {
     });
   };
 
-    const handleDelete = (id) => {
-      axiosSecure.delete(`/delete-article/${id}`).then((res) => {
-        refetch();
-        if (res.data.deletedCount > 0) {
-          Swal.fire({
-            position: "center",
-            icon: "success",
-            title: "Article Deleted",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-        }
-      });
-    };
+  const handleDelete = (id) => {
+    axiosSecure.delete(`/delete-article/${id}`).then((res) => {
+      refetch();
+      if (res.data.deletedCount > 0) {
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: "Article Deleted",
+          showConfirmButton: false,
+          timer: 1500,
+        });
+      }
+    });
+  };
   return (
-    <div>
+    <div className="relative">
       <h2 className="font-bold text-3xl p-6 bg-gray-500 ml-1">All Articles</h2>
       <div className="mt-4 overflow-x-scroll">
         <table className="w-full text-center ">
@@ -154,7 +170,9 @@ const AllArticleAdmin = () => {
                   </button>
                 </td>
                 <td>
-                  <button onClick={()=> handleDelete(article?._id)} className="p-2 bg-red-700 text-white rounded-md">
+                  <button
+                    onClick={() => handleDelete(article?._id)}
+                    className="p-2 bg-red-700 text-white rounded-md">
                     Delete
                   </button>
                 </td>
@@ -174,6 +192,22 @@ const AllArticleAdmin = () => {
             ))}
           </tbody>
         </table>
+      </div>
+
+      <div
+        className={
+          display
+            ? "absolute top-0 h-screen w-full flex items-center justify-center"
+            : "hidden"
+        }>
+        <div className="p-6 rounded-md shadow-md bg-gray-900 text-gray-50 flex flex-col space-y-3 justify-center items-center">
+          <h2>Please Give feedback and make decline</h2>
+          <form onSubmit={handleDeclineSubmit}>
+            <input type="text" name="info"  className="bg-gray-300 text-gray-800 p-2 rounded-md"/>
+            <br />
+            <input type="submit" className="bg-orange-700 w-full mt-4 p-1 rounded-lg" value="Decline" />
+          </form>
+        </div>
       </div>
     </div>
   );
