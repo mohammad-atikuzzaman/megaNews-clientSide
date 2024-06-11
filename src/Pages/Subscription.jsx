@@ -1,10 +1,34 @@
+import { useNavigate } from "react-router-dom";
+import useAuth from "../Hooks/useAuth";
+import useAxiosPrivet from "../Hooks/useAxiosPrivet";
+
 const Subscription = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const axiosSecure = useAxiosPrivet();
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const value = parseInt(e.target.plan.value);
-    console.log(value)
+    console.log(value);
+
+    if (value === 1) {
+      axiosSecure.post("/price", { time: value, price: 1,  email: user?.email }).then((res) => {
+        console.log(res.data);
+      });
+    } else if (value === 7200) {
+      axiosSecure.post("/price", { time: value, price: 5,  email: user?.email }).then((res) => {
+        console.log(res.data);
+      });
+    } else if (value === 14400) {
+      axiosSecure.post("/price", { time: value, price: 8,  email: user?.email }).then((res) => {
+        console.log(res.data);
+      });
+    }
     // const getPlanTime = new Date().toLocaleString()
-    // console.log(getPlanTime)
+    // console.log(getPlanTime)z
+    navigate("/payment")
   };
   return (
     <div className="container mx-auto">
@@ -27,7 +51,7 @@ const Subscription = () => {
         </div>
         <hr className="my-6" />
         <h2 className="font-semibold text-xl  mb-4">Chose a Plan and Get It</h2>
-        
+
         <form onSubmit={handleSubmit}>
           {/* all value set in minutes */}
           <select

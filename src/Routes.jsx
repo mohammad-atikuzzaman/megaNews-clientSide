@@ -19,6 +19,7 @@ import DetailsArticle from "./Pages/DetailsArticle";
 import PremiumArticles from "./Pages/PremiumArticles";
 import PremiumProtect from "./UsersProtect/PremiumProtect";
 import UpdateArticle from "./Pages/UpdateArticle";
+import PaymentPage from "./Pages/PaymentPage";
 
 const router = createBrowserRouter([
   {
@@ -75,6 +76,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Subscription></Subscription>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/payment",
+        element: (
+          <ProtectedRoute>
+            <PaymentPage></PaymentPage>
           </ProtectedRoute>
         ),
       },
