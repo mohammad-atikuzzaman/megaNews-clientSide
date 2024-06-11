@@ -1,11 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import useAuth from "../Hooks/useAuth";
 import useAxiosPrivet from "../Hooks/useAxiosPrivet";
+import usePrice from "../Hooks/usePrice";
 
 const Subscription = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
   const axiosSecure = useAxiosPrivet();
+  const [priceData, isLoading, refetch] = usePrice();
+  console.log(priceData);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,21 +17,35 @@ const Subscription = () => {
     console.log(value);
 
     if (value === 1) {
-      axiosSecure.post("/price", { time: value, price: 1,  email: user?.email }).then((res) => {
-        console.log(res.data);
-      });
+      axiosSecure
+        .post("/price", { time: value, price: 1, email: user?.email })
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.acknowledged) {
+            refetch();
+          }
+        });
     } else if (value === 7200) {
-      axiosSecure.post("/price", { time: value, price: 5,  email: user?.email }).then((res) => {
-        console.log(res.data);
-      });
+      axiosSecure
+        .post("/price", { time: value, price: 5, email: user?.email })
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.acknowledged) {
+            refetch();
+          }
+        });
     } else if (value === 14400) {
-      axiosSecure.post("/price", { time: value, price: 8,  email: user?.email }).then((res) => {
-        console.log(res.data);
-      });
+      axiosSecure
+        .post("/price", { time: value, price: 8, email: user?.email })
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.acknowledged) {
+            refetch();
+          }
+        });
     }
-    // const getPlanTime = new Date().toLocaleString()
-    // console.log(getPlanTime)z
-    navigate("/payment")
+    refetch();
+    navigate("/payment");
   };
   return (
     <div className="container mx-auto">

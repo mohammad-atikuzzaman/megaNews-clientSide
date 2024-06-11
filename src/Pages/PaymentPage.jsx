@@ -3,8 +3,6 @@ import { loadStripe } from "@stripe/stripe-js";
 import Checkoutform from "./Checkoutform";
 // todo: publishable key
 const stripePromise = loadStripe(import.meta.env.VITE_PAYMENT_KEY);
-// const key = import.meta.env.VITE_PAYMENT_KEY
-// console.log(key)
 const PaymentPage = () => {
   return (
     <div className="container mx-auto my-6 bg-gray-800 p-7">

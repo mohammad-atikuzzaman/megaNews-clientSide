@@ -14,7 +14,7 @@ const Checkoutform = () => {
   const elements = useElements();
   const axiosSecure = useAxiosPrivet();
   const [priceData, isLoading] = usePrice();
-  // console.log(isLoading);
+  console.log(priceData);
 
   const handleLoadPayData =()=>{
     setDisplay(!display)
@@ -24,6 +24,25 @@ const Checkoutform = () => {
         // console.log(res.data.clientSecret);
         setClientSecret(res.data.clientSecret);
       });
+  }
+
+  const handleClearCartData =()=>{
+    axiosSecure.delete(`/price/${user?.email}`)
+    .then(res =>{
+      console.log(res.data)
+    })
+  }
+
+  const handleMakeUserPremium =()=>{
+    const getPlanTime = new Date().toLocaleString();
+    console.log(getPlanTime)
+    axiosSecure.patch(`/usersPremium/${user?.email}`, {
+      type: "premium",
+      planTime: priceData?.time,
+      timeOfGetPlan: getPlanTime,
+    }).then(res =>{
+      console.log(res.data)
+    })
   }
 
   const handleSubmit = async (e) => {
@@ -66,13 +85,16 @@ const Checkoutform = () => {
     setPayError("")
     if(paymentIntent.status === "succeeded"){
       setTransectionId(paymentIntent.id)
+      handleClearCartData()
+      handleMakeUserPremium()
     }
    }
 
   };
   return (
     <div className="">
-      <div className="w-full flex justify-center">
+      <div className="w-full flex flex-col items-center">
+        <h1 className="font-semibold text-center">Do not Reload in this Page</h1>
         <button
           onClick={handleLoadPayData}
           disabled={isLoading}
