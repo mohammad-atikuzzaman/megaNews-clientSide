@@ -1,6 +1,7 @@
 import Carocel from '../components/Carocel';
 import Publishers from '../components/Publishers';
 import Statistics from '../components/Statistics';
+import SubsCriptonGet from '../components/SubsCriptonGet';
 
 const Home = () => {
   return (
@@ -38,6 +39,7 @@ const Home = () => {
         </div>
         <Publishers></Publishers>
         <Statistics></Statistics>
+        <SubsCriptonGet></SubsCriptonGet>
       </div>
     </div>
   );
