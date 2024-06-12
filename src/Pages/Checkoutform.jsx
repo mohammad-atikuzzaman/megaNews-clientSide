@@ -3,47 +3,51 @@ import { useState } from "react";
 import useAxiosPrivet from "../Hooks/useAxiosPrivet";
 import usePrice from "../Hooks/usePrice";
 import useAuth from "../Hooks/useAuth";
+import Swal from "sweetalert2";
+import useUserPremiam from "../Hooks/useUserPremiam";
 
 const Checkoutform = () => {
   const [payError, setPayError] = useState("");
   const [clientSecret, setClientSecret] = useState("");
   const [transectionId, setTransectionId] = useState("");
-  const [display, setDisplay] = useState(false)
-  const {user}= useAuth()
+  const [display, setDisplay] = useState(false);
+  const { user } = useAuth();
   const stripe = useStripe();
   const elements = useElements();
   const axiosSecure = useAxiosPrivet();
   const [priceData, isLoading] = usePrice();
+  const [ , ,isPremiumRefetch] = useUserPremiam()
   console.log(priceData);
 
-  const handleLoadPayData =()=>{
-    setDisplay(!display)
+  const handleLoadPayData = () => {
+    setDisplay(!display);
     axiosSecure
       .post("/create-payment-intent", { price: priceData?.price })
       .then((res) => {
         // console.log(res.data.clientSecret);
         setClientSecret(res.data.clientSecret);
       });
-  }
+  };
 
-  const handleClearCartData =()=>{
-    axiosSecure.delete(`/price/${user?.email}`)
-    .then(res =>{
-      console.log(res.data)
-    })
-  }
+  const handleClearCartData = () => {
+    axiosSecure.delete(`/price/${user?.email}`).then((res) => {
+      console.log(res.data);
+    });
+  };
 
-  const handleMakeUserPremium =()=>{
+  const handleMakeUserPremium = () => {
     const getPlanTime = new Date().toLocaleString();
-    console.log(getPlanTime)
-    axiosSecure.patch(`/usersPremium/${user?.email}`, {
-      type: "premium",
-      planTime: priceData?.time,
-      timeOfGetPlan: getPlanTime,
-    }).then(res =>{
-      console.log(res.data)
-    })
-  }
+    console.log(getPlanTime);
+    axiosSecure
+      .patch(`/usersPremium/${user?.email}`, {
+        type: "premium",
+        planTime: priceData?.time,
+        timeOfGetPlan: getPlanTime,
+      })
+      .then((res) => {
+        console.log(res.data);
+      });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -68,33 +72,45 @@ const Checkoutform = () => {
       setPayError("");
     }
 
-   const {paymentIntent, error: confirmError} = await stripe.confirmCardPayment(clientSecret, {
-     payment_method: {
-       card: card,
-       billing_details: {
-         email: user?.email || "anonymous",
-         name: user?.displayName || "anonymous",
-       },
-     },
-   });
-   if(confirmError){
-    // console.log("confirmError", confirmError)
-    setPayError(confirmError)
-   }else{
-    // console.log("paymentIntent",paymentIntent)
-    setPayError("")
-    if(paymentIntent.status === "succeeded"){
-      setTransectionId(paymentIntent.id)
-      handleClearCartData()
-      handleMakeUserPremium()
-    }
-   }
+    const { paymentIntent, error: confirmError } =
+      await stripe.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: card,
+          billing_details: {
+            email: user?.email || "anonymous",
+            name: user?.displayName || "anonymous",
+          },
+        },
+      });
+    if (confirmError) {
+      // console.log("confirmError", confirmError)
+      setPayError(confirmError);
+    } else {
+      // console.log("paymentIntent",paymentIntent)
+      setPayError("");
+      if (paymentIntent.status === "succeeded") {
+        setTransectionId(paymentIntent.id);
+        Swal.fire({
+          position: "center",
+          icon: "success",
+          title: `Subscription taken successful`,
+          showConfirmButton: false,
+          timer: 1500,
+        });
+        
+        handleClearCartData();
+        handleMakeUserPremium();
+        isPremiumRefetch()
 
+      }
+    }
   };
   return (
     <div className="">
       <div className="w-full flex flex-col items-center">
-        <h1 className="font-semibold text-center">Do not Reload in this Page</h1>
+        <h1 className="font-semibold text-center">
+          Do not Reload in this Page
+        </h1>
         <button
           onClick={handleLoadPayData}
           disabled={isLoading}
