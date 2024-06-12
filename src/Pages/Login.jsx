@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import useAxuisPublic from "../Hooks/useAxuisPublic";
 import useAxiosPrivet from "../Hooks/useAxiosPrivet";
+import useUserPremiam from "../Hooks/useUserPremiam";
 
 const Login = () => {
   const [displayPass, setDisplayPass] = useState(true);
@@ -20,6 +21,7 @@ const Login = () => {
   const location = useLocation();
   const axiosPublic = useAxuisPublic();
   const axiosSecure = useAxiosPrivet();
+  const [, , isPremiumRefetch] =useUserPremiam()
 
   const onSubmit = async (data) => {
     const { email, password } = data;
@@ -57,6 +59,7 @@ const Login = () => {
                 })
                 .then((rRes) => {
                   console.log(rRes);
+                  isPremiumRefetch()
                 });
             }
           }
@@ -105,6 +108,7 @@ const Login = () => {
                 })
                 .then((rRes) => {
                   console.log(rRes.data);
+                  isPremiumRefetch()
                 });
             }
           }

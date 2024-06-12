@@ -4,7 +4,7 @@ import useUserPremiam from "../Hooks/useUserPremiam";
 
 const ArticleCard = ({ article }) => {
   const [isPremium] = useUserPremiam();
-  const { _id, authorName, authorPhoto, title, details, image, publisher } =
+  const { _id, authorName, authorPhoto, title, detail, image, publisher } =
     article;
   return (
     <div
@@ -37,15 +37,16 @@ const ArticleCard = ({ article }) => {
             <span className="font-semibold">Publisher : </span>
             <p>{publisher}</p>
           </div>
-          <p>{title}</p>
+          <h2 className="font-semibold text-xl">{title}</h2>
+          <p>{detail.slice(0, 80)}</p>
         </div>
         <Link to={`/article-details/${_id}`}>
           <button
             disabled={article?.type ==="premium" ? isPremium? false : true :false}
             className={
               article?.type === "premium"
-                ? "w-full bg-yellow-700 text-white p-2 rounded-md"
-                : "w-full bg-violet-400 p-2 rounded-md"
+                ? "w-full bg-yellow-700 text-white p-2 rounded-md mt-3"
+                : "w-full bg-violet-400 p-2 rounded-md mt-3"
             }>
             Details
           </button>
