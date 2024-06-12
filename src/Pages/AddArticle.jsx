@@ -61,6 +61,18 @@ const AddArticle = () => {
       // console.log(publisherInfo);
 
       axiosSecure.post("/add-article", publisherInfo).then((dbRes) => {
+        if (
+          dbRes.data?.message ===
+          "Please take a subscription to post another article"
+        ) {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Please take a subscription to post another article",
+            showConfirmButton: false,
+            timer: 2000,
+          });
+        }
         if (dbRes.data.insertedId) {
           Swal.fire({
             position: "center",
