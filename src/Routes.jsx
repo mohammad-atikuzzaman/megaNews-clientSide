@@ -20,6 +20,7 @@ import PremiumArticles from "./Pages/PremiumArticles";
 import PremiumProtect from "./UsersProtect/PremiumProtect";
 import UpdateArticle from "./Pages/UpdateArticle";
 import PaymentPage from "./Pages/PaymentPage";
+import DashboardStatistics from "./Pages/DashboardStatistics";
 
 const router = createBrowserRouter([
   {
@@ -109,6 +110,10 @@ const router = createBrowserRouter([
     path: "/dashboard",
     element: <DashBoard></DashBoard>,
     children: [
+      {
+       index: true,
+       element: <DashboardStatistics></DashboardStatistics>
+      },
       {
         path: "users",
         element: (

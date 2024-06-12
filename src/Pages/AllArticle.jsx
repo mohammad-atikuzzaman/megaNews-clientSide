@@ -2,18 +2,21 @@ import { useEffect, useState } from "react";
 import useAxiosPrivet from "../Hooks/useAxiosPrivet";
 import ArticleCard from "../SharedComponents/ArticleCard";
 import usePublisher from "../Hooks/usePublisher";
+import { useQuery } from "@tanstack/react-query";
 
 const AllArticle = () => {
   const axiosSecure = useAxiosPrivet();
   const [articles, setArticles] = useState([]);
   const [display, setDisplay] = useState(false);
   const [publishers] = usePublisher();
-  console.log(publishers);
-  useEffect(() => {
-    axiosSecure.get("/all-articles").then((res) => {
-      setArticles(res.data);
-    });
-  }, [axiosSecure]);
+  const {data} = useQuery({
+    queryKey: ["alldata"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/all-articles");
+      setArticles(res.data)
+      return res.data;
+    },
+  });
 
   const handleFilterByPublisher = (publisher) => {
     console.log(publisher);
@@ -82,7 +85,7 @@ const AllArticle = () => {
         </div>
       </div>
 
-      <hr  className="mb-6"/>
+      <hr className="mb-6" />
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {articles.map((article) => (
           <ArticleCard key={article._id} article={article}></ArticleCard>
