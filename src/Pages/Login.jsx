@@ -39,18 +39,18 @@ const Login = () => {
         });
 
         axiosPublic.get(`/userPremium/${email}`).then((pRes) => {
-          console.log(pRes.data);
+          // console.log(pRes.data);
           if (pRes.data?.type === "premium") {
             const currentTime = new Date();
             const planGetingTime = new Date(pRes.data?.timeOfGetPlan);
 
             const differenceOfTime = currentTime - planGetingTime;
             const minutes = differenceOfTime / (1000 * 60);
-            console.log("minute", minutes);
-            console.log("time", pRes.data?.planTime);
+            // console.log("minute", minutes);
+            // console.log("time", pRes.data?.planTime);
 
             if (minutes > pRes.data?.planTime) {
-              console.log(" paici re vai");
+              // console.log(" paici re vai");
               axiosSecure
                 .patch(`/usersPremium/${email}`, {
                   type: "",
@@ -58,7 +58,7 @@ const Login = () => {
                   timeOfGetPlan: "",
                 })
                 .then((rRes) => {
-                  console.log(rRes);
+                  // console.log(rRes);
                   isPremiumRefetch()
                 });
             }
@@ -87,7 +87,7 @@ const Login = () => {
           image: res.user?.photoURL,
         };
         axiosPublic.get(`/userPremium/${res.user?.email}`).then((pRes) => {
-          console.log(pRes.data);
+          // console.log(pRes.data);
 
           if (pRes.data?.type === "premium") {
             const currentTime = new Date();
@@ -96,10 +96,10 @@ const Login = () => {
             const differenceOfTime = currentTime - planGetingTime;
             const minutes = differenceOfTime / (1000 * 60);
 
-            console.log("minute", minutes);
-            console.log("time", pRes.data?.planTime);
+            // console.log("minute", minutes);
+            // console.log("time", pRes.data?.planTime);
             if (minutes > pRes.data?.planTime) {
-              console.log("paici re vai");
+              // console.log("paici re vai");
               axiosSecure
                 .patch(`/usersPremium/${res.user?.email}`, {
                   type: "",
@@ -107,7 +107,7 @@ const Login = () => {
                   timeOfGetPlan: "",
                 })
                 .then((rRes) => {
-                  console.log(rRes.data);
+                  // console.log(rRes.data);
                   isPremiumRefetch()
                 });
             }
@@ -117,10 +117,10 @@ const Login = () => {
         axiosPublic
           .post("/users", userInfo)
           .then((res) => {
-            console.log(res.data);
+            // console.log(res.data);
           })
           .catch((err) => {
-            console.log(err);
+            // console.log(err);
           });
         Swal.fire({
           position: "center",
@@ -132,7 +132,7 @@ const Login = () => {
         navigate("/");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
   return (

@@ -34,7 +34,7 @@ const Profile = () => {
               image: res.data?.data?.display_url,
             })
             .then((DBRes) => {
-              console.log("res by db", DBRes.data);
+              // console.log("res by db", DBRes.data);
               if (DBRes.data.modifiedCount > 0) {
                 setLoading(false)
                 Swal.fire({

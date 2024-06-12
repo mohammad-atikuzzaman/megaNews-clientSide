@@ -11,7 +11,7 @@ const DetailsArticle = () => {
   const [tags, setTags] = useState([]);
   const axiosPublic = useAxuisPublic();
 
-  console.log(user?.email)
+  // console.log(user?.email)
 
   useEffect(() => {
      setLoading(true)
@@ -20,11 +20,11 @@ const DetailsArticle = () => {
             setArticle(res.data);
             const tags = res.data.tags;
             setTags(tags);
-            console.log(res.data.views + 1);
+            // console.log(res.data.views + 1);
             axiosPublic
               .patch(`/article/${id}`, { views: res.data.views + 1 })
               .then((res) => {
-                console.log(res.data);
+                // console.log(res.data);
                 setLoading(false)
               });
           });

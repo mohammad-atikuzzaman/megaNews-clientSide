@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
 
 const axiosPrivet = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://meganews-server.vercel.app",
 });
 
 const useAxiosPrivet = () => {
@@ -26,7 +26,7 @@ const useAxiosPrivet = () => {
     async (error) => {
       const status = error.response.status;
 
-      console.log("statas error in interseptor", status);
+      // console.log("statas error in interseptor", status);
 
       if (status === 401 || status === 403) {
         await logOut();

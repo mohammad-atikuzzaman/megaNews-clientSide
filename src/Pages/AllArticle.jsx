@@ -19,7 +19,7 @@ const AllArticle = () => {
   });
 
   const handleFilterByPublisher = (publisher) => {
-    console.log(publisher);
+    // console.log(publisher);
     axiosSecure.get(`all-filtered-articles/${publisher}`).then((res) => {
       setArticles(res.data);
     });

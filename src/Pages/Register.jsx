@@ -48,8 +48,12 @@ const Register = () => {
           updateUserProfile(user, photo)
             .then(() => {
               axiosPublic.post("/users", userInfo)
-              .then(res =>console.log("success", res))
-              .catch(err => console.log(err))
+              .then(res =>{
+                // console.log("success", res)
+            })
+              .catch(err => {
+                // console.log(err)
+            })
               navigate("/");
               Swal.fire({
                 position: "center",
@@ -60,11 +64,11 @@ const Register = () => {
               });
             })
             .catch((err) => {
-              console.log(err);
+              // console.log(err);
             });
         })
         .catch((err) => {
-          console.log(err);
+          // console.log(err);
         });
     }
   };
@@ -80,10 +84,10 @@ const Register = () => {
         }
         axiosPublic.post("/users", userInfo)
         .then(res =>{
-          console.log(res.data)
+          // console.log(res.data)
         })
         .catch(err =>{
-          console.log(err)
+          // console.log(err)
         })
         Swal.fire({
           position: "center",
@@ -95,7 +99,7 @@ const Register = () => {
         navigate("/");
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   };
 

@@ -11,11 +11,11 @@ const AllArticleAdmin = () => {
   const [display, setDisplay] = useState(false);
 
   const handleApprove = (id) => {
-    console.log("approve", id);
+    // console.log("approve", id);
     axiosSecure
       .patch(`/my-article/${id}`, { status: "approved" })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.modifiedCount > 0) {
           Swal.fire({
             position: "center",
@@ -37,16 +37,16 @@ const AllArticleAdmin = () => {
   };
   const handleDeclineSubmit = (e) => {
     e.preventDefault();
-    console.log(decId);
+    // console.log(decId);
     const info = e.target.info.value
     if(!info){
       return toast.error("Please give any Feedback")
     }
-    console.log(info)
+    // console.log(info)
     axiosSecure
       .patch(`/my-article/${decId}`, { status: "declined",reason: info })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         if (res.data.modifiedCount > 0) {
           Swal.fire({
             position: "center",
@@ -61,9 +61,9 @@ const AllArticleAdmin = () => {
     setDisplay(!display);
   };
   const handleMakePremium = (id) => {
-    console.log("make premium", id);
+    // console.log("make premium", id);
     axiosSecure.patch(`/my-article/${id}`, { type: "premium" }).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
       if (res.data.modifiedCount > 0) {
         Swal.fire({
           position: "center",

@@ -6,12 +6,12 @@ import useUsers from "../Hooks/useUsers";
 const Users = () => {
   const axiosPriver = useAxiosPrivet();
   const [users, refetch]= useUsers()
-  console.log(users)
+  // console.log(users)
 
   const handleMakeAdmin =(email, name)=>{
     axiosPriver.patch(`/users/${email}`, {role: "admin"})
     .then(res =>{
-      console.log(res.data)
+      // console.log(res.data)
       if(res.data.modifiedCount > 0){
         Swal.fire({
           position: "center",

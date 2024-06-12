@@ -37,7 +37,7 @@ const MyArticle = () => {
  
   const [reason, setReason] = useState("")
   const [display, setDisplay]= useState(false)
-  console.log(reason)
+  // console.log(reason)
 
   return (
     <div className="container mx-auto ">

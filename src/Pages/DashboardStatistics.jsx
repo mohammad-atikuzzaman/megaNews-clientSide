@@ -12,18 +12,19 @@ const DashboardStatistics = () => {
       return res.data;
     },
   });
-  console.log(articleVsPublisher);
+  // console.log(articleVsPublisher);
 
   const options = {
     title: "Article vs. Publisher comparison",
   };
 
-
   return (
-    <div className="mx-auto">
-      <h2>theis is analicsic page</h2>
+    <div className="mx-auto ml-2">
+      <h2 className="bg-gray-800 p-4 text-4xl font-bold mb-2">The Analytics Of Article and publisher</h2>
       <div>
-        <h2>Pie charts</h2>
+        <h2 className="font-semibold text-3xl bg-gray-800 text-gray-400">
+          Pie chart
+        </h2>
         <Chart
           chartType="PieChart"
           data={articleVsPublisher}
@@ -33,26 +34,26 @@ const DashboardStatistics = () => {
         />
       </div>
       <div>
+        <h2 className="font-semibold text-3xl bg-gray-800 text-gray-400">
+          Column chart
+        </h2>
         <Chart
-        chartType="ColumnChart"
-        data={articleVsPublisher}
-        options={options}
-        width="80%"
-        height="400px"
-        >
-
-        </Chart>
+          chartType="ColumnChart"
+          data={articleVsPublisher}
+          options={options}
+          width="80%"
+          height="400px"></Chart>
       </div>
       <div>
+        <h2 className="font-semibold text-3xl bg-gray-800 text-gray-400">
+          Scatter chart
+        </h2>
         <Chart
-        chartType="ScatterChart"
-        data={articleVsPublisher}
-        options={options}
-        width="80%"
-        height="400px"
-        >
-
-        </Chart>
+          chartType="ScatterChart"
+          data={articleVsPublisher}
+          options={options}
+          width="80%"
+          height="400px"></Chart>
       </div>
     </div>
   );

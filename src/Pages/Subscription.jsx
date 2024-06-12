@@ -8,19 +8,19 @@ const Subscription = () => {
   const { user } = useAuth();
   const axiosSecure = useAxiosPrivet();
   const [priceData, isLoading, refetch] = usePrice();
-  console.log(priceData);
+  // console.log(priceData);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const value = parseInt(e.target.plan.value);
-    console.log(value);
+    // console.log(value);
 
     if (value === 1) {
       axiosSecure
         .post("/price", { time: value, price: 1, email: user?.email })
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.acknowledged) {
             refetch();
           }
@@ -29,7 +29,7 @@ const Subscription = () => {
       axiosSecure
         .post("/price", { time: value, price: 5, email: user?.email })
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.acknowledged) {
             refetch();
           }
@@ -38,7 +38,7 @@ const Subscription = () => {
       axiosSecure
         .post("/price", { time: value, price: 8, email: user?.email })
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           if (res.data.acknowledged) {
             refetch();
           }

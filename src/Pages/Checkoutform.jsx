@@ -17,7 +17,7 @@ const Checkoutform = () => {
   const axiosSecure = useAxiosPrivet();
   const [priceData, isLoading] = usePrice();
   const [ , ,isPremiumRefetch] = useUserPremiam()
-  console.log(priceData);
+  // console.log(priceData);
 
   const handleLoadPayData = () => {
     setDisplay(!display);
@@ -31,13 +31,13 @@ const Checkoutform = () => {
 
   const handleClearCartData = () => {
     axiosSecure.delete(`/price/${user?.email}`).then((res) => {
-      console.log(res.data);
+      // console.log(res.data);
     });
   };
 
   const handleMakeUserPremium = () => {
     const getPlanTime = new Date().toLocaleString();
-    console.log(getPlanTime);
+    // console.log(getPlanTime);
     axiosSecure
       .patch(`/usersPremium/${user?.email}`, {
         type: "premium",
@@ -45,7 +45,7 @@ const Checkoutform = () => {
         timeOfGetPlan: getPlanTime,
       })
       .then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
       });
   };
 
@@ -57,7 +57,7 @@ const Checkoutform = () => {
     }
     const card = elements.getElement(CardElement);
     if (card === null) {
-      console.log("card not found");
+      // console.log("card not found");
       return;
     }
     const { error, paymentMethod } = await stripe.createPaymentMethod({
@@ -65,7 +65,7 @@ const Checkoutform = () => {
       card,
     });
     if (error) {
-      console.log("payment error", error);
+      // console.log("payment error", error);
       setPayError(error.message);
     } else {
       // console.log("payment method", paymentMethod);
