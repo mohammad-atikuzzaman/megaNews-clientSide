@@ -65,7 +65,7 @@ const Profile = () => {
               Edit Profile
             </button>
           </div>
-          <p className="w-full bg-gray-400 p-3 font-semibold mb-7">
+          <p className="w-full bg-gray-400 p-3 font-semibold mb-7 rounded-md">
             Email : {user?.email}
           </p>
           <form onSubmit={handleSubmit(onSubmit)} className="w-full space-y-6">
@@ -77,7 +77,7 @@ const Profile = () => {
                 type="text"
                 disabled={!edit}
                 id="name"
-                className="w-full p-2 rounded-md"
+                className="w-full p-2 rounded-md font-semibold"
                 {...register("name", { required: true })}
                 defaultValue={user?.displayName}
               />
@@ -111,7 +111,7 @@ const Profile = () => {
               value="Update"
               className={
                 edit
-                  ? "bg-violet-400 w-full p-1 rounded-md font-semibold text-gray-100"
+                  ? "bg-violet-400 w-full p-1 rounded-md font-semibold text-gray-100 cursor-pointer hover:scale-105"
                   : "hidden"
               }
             />

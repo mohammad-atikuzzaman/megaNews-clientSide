@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 
 const usePublisher = () => {
  const { data: publishers = [], refetch } = useQuery({
-   queryKey: ["users"],
+   queryKey: ["publishers"],
    queryFn: async () => {
      const res = await axios.get("http://localhost:5000/publisher");
      return res.data;
