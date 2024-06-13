@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
 
 const axiosPrivet = axios.create({
-  baseURL: "http://localhost:5000",
+  baseURL: "https://meganews-server.vercel.app",
 });
 
 const useAxiosPrivet = () => {

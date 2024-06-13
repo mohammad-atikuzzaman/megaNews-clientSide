@@ -211,7 +211,7 @@ const AllArticleAdmin = () => {
             </tbody>
           </table>
         </div>
-        <div className="my-4 mx-auto">
+        <div className="my-4">
           <div className="flex gap-1 text-gray-100 font-semibold">
             {pages.map((page, ind) => (
               <button

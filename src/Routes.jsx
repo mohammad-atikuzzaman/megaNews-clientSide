@@ -117,7 +117,7 @@ const router = createBrowserRouter([
       },
       {
         path: "users",
-        loader: () => fetch("http://localhost:5000/user-count"),
+        loader: () => fetch("https://meganews-server.vercel.app/user-count"),
         element: (
           <AdminProtect>
             <Users></Users>
@@ -126,7 +126,7 @@ const router = createBrowserRouter([
       },
       {
         path: "all-article",
-        loader: () => fetch("http://localhost:5000/article-count"),
+        loader: () => fetch("https://meganews-server.vercel.app/article-count"),
         element: (
           <AdminProtect>
             <AllArticleAdmin></AllArticleAdmin>
