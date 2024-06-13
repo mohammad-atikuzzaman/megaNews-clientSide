@@ -109,14 +109,15 @@ const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: <DashBoard></DashBoard>,
-    errorElement:<ErrorComponent></ErrorComponent>,
+    errorElement: <ErrorComponent></ErrorComponent>,
     children: [
       {
-       index: true,
-       element: <DashboardStatistics></DashboardStatistics>
+        index: true,
+        element: <DashboardStatistics></DashboardStatistics>,
       },
       {
         path: "users",
+        loader: () => fetch("http://localhost:5000/user-count"),
         element: (
           <AdminProtect>
             <Users></Users>
@@ -125,6 +126,7 @@ const router = createBrowserRouter([
       },
       {
         path: "all-article",
+        loader: () => fetch("http://localhost:5000/article-count"),
         element: (
           <AdminProtect>
             <AllArticleAdmin></AllArticleAdmin>

@@ -4,11 +4,19 @@ import Swal from "sweetalert2";
 import { FaDotCircle } from "react-icons/fa";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+import { useLoaderData } from "react-router-dom";
 
 const AllArticleAdmin = () => {
   const axiosSecure = useAxiosPrivet();
   const [allArticle, refetch] = useAllArticles();
   const [display, setDisplay] = useState(false);
+  const {count} = useLoaderData()
+  const itemPerPage = 5
+  const numberOfPages = Math.ceil(count/itemPerPage)
+  const pages = [...Array(numberOfPages).keys()]
+  console.log(pages)
 
   const handleApprove = (id) => {
     // console.log("approve", id);
@@ -192,6 +200,11 @@ const AllArticleAdmin = () => {
             ))}
           </tbody>
         </table>
+        <div>
+          <div className="flex gap-1 text-gray-100 font-semibold">
+            {pages.map((page, ind) => <button className="bg-gray-600 p-1  rounded-sm" key={ind}>{page}</button>)}
+          </div>
+        </div>
       </div>
 
       <div
