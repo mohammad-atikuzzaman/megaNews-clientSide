@@ -1,16 +1,25 @@
 import Swal from "sweetalert2";
 import useAxiosPrivet from "../Hooks/useAxiosPrivet";
-import useUsers from "../Hooks/useUsers";
 import { useLoaderData } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const Users = () => {
   const axiosPriver = useAxiosPrivet();
-  const [users, refetch] = useUsers();
+  const [reFetch, setRefetch]= useState(false)
+  const [users, setUsers]= useState([])
   const { count } = useLoaderData();
   const itemPerPage = 5;
   const numberOfPages = Math.ceil(count / itemPerPage);
+  const [selected, setSelected]= useState(0)
   const pages = [...Array(numberOfPages).keys()];
-  console.log(pages);
+  // console.log(selected);
+
+  useEffect(()=>{
+    axiosPriver.get(`/users?page=${selected}&size=${itemPerPage}&refetch=${reFetch}`)
+    .then(res => {
+      setUsers(res.data)
+    })
+  },[selected, reFetch])
 
   const handleMakeAdmin = (email, name) => {
     axiosPriver.patch(`/users/${email}`, { role: "admin" }).then((res) => {
@@ -23,7 +32,7 @@ const Users = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-        refetch();
+        setRefetch(!reFetch)
       }
     });
   };
@@ -74,14 +83,21 @@ const Users = () => {
             ))}
           </tbody>
         </table>
-        <div>
-          <div className="flex gap-1 text-gray-100 font-semibold">
-            {pages.map((page, ind) => (
-              <button className="bg-gray-600 p-1  rounded-sm" key={ind}>
-                {page}
-              </button>
-            ))}
-          </div>
+      </div>
+      <div className="my-4 mx-auto">
+        <div className="flex gap-1 text-gray-100 font-semibold">
+          {pages.map((page, ind) => (
+            <button
+              onClick={() => setSelected(page)}
+              className={
+                selected === page
+                  ? "bg-violet-500 p-1  rounded-sm"
+                  : "bg-gray-600 p-1  rounded-sm"
+              }
+              key={ind}>
+              {page}
+            </button>
+          ))}
         </div>
       </div>
     </div>
