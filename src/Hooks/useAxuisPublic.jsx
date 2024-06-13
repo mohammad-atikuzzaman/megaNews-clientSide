@@ -4,8 +4,7 @@ const axiosPublic = axios.create({
   baseURL: "https://meganews-server.vercel.app",
 });
 const useAxuisPublic = () => {
-
-  return axiosPublic
+  return axiosPublic;
 };
 
 export default useAxuisPublic;

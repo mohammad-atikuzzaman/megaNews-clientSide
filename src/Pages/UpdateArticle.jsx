@@ -28,14 +28,6 @@ const UpdateArticle = () => {
     formState: { errors },
   } = useForm();
 
-  const { data: article } = useQuery({
-    queryKey: ["articleData"],
-    queryFn: async () => {
-      const res = await axiosSecure(`/article/${id}`);
-      return res.data;
-    },
-  });
-
   const onSubmit = async (data) => {
     const imageFile = { image: data.file[0] };
     const res = await axios.post(imageHostingApi, imageFile, {
@@ -84,7 +76,7 @@ const UpdateArticle = () => {
                   </label>
                   <input
                     id="title"
-                    defaultValue={article?.title}
+                   
                     type="text"
                     {...register("title", { required: true })}
                     placeholder="Article Tile"
@@ -102,7 +94,7 @@ const UpdateArticle = () => {
                   </label>
                   <input
                     id="description"
-                    defaultValue={article?.detail}
+          
                     type="text"
                     {...register("description", { required: true })}
                     placeholder="Article Description"

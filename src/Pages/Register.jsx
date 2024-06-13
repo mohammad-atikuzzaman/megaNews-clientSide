@@ -19,11 +19,9 @@ const Register = () => {
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm();
   const navigate = useNavigate();
-
 
   const onSubmit = async (data) => {
     setSpiner(true);
@@ -33,27 +31,27 @@ const Register = () => {
         "content-type": "multipart/form-data",
       },
     });
-    reset();
     if (res.data.success) {
       const userInfo = {
-        userName: data.user,
-        userEmail: data.email,
-        image: res.data.data.display_url,
+        userName: data?.user,
+        userEmail: data?.email,
+        image: res.data?.data?.display_url,
       };
-      const photo = res.data.data.display_url;
+      const photo = res.data?.data?.display_url;
       const { email, password, user } = data;
       // console.log(userInfo)
       registerWithEmailPass(email, password)
         .then((fire) => {
           updateUserProfile(user, photo)
             .then(() => {
-              axiosPublic.post("/users", userInfo)
-              .then(res =>{
-                // console.log("success", res)
-            })
-              .catch(err => {
-                // console.log(err)
-            })
+              axiosPublic
+                .post("/users", userInfo)
+                .then((res) => {
+                  // console.log("success", res)
+                })
+                .catch((err) => {
+                  // console.log(err)
+                });
               navigate("/");
               Swal.fire({
                 position: "center",
@@ -78,17 +76,18 @@ const Register = () => {
       .then((res) => {
         // console.log(res.user);
         const userInfo = {
-          userName : res.user?.displayName,
-          userEmail : res.user?.email,
-          image: res.user?.photoURL
-        }
-        axiosPublic.post("/users", userInfo)
-        .then(res =>{
-          // console.log(res.data)
-        })
-        .catch(err =>{
-          // console.log(err)
-        })
+          userName: res.user?.displayName,
+          userEmail: res.user?.email,
+          image: res.user?.photoURL,
+        };
+        axiosPublic
+          .post("/users", userInfo)
+          .then((res) => {
+            // console.log(res.data)
+          })
+          .catch((err) => {
+            // console.log(err)
+          });
         Swal.fire({
           position: "center",
           icon: "success",

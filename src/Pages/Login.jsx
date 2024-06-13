@@ -21,7 +21,6 @@ const Login = () => {
   const location = useLocation();
   const axiosPublic = useAxuisPublic();
   const axiosSecure = useAxiosPrivet();
-  const [, , isPremiumRefetch] =useUserPremiam()
 
   const onSubmit = async (data) => {
     const { email, password } = data;
@@ -50,7 +49,6 @@ const Login = () => {
             // console.log("time", pRes.data?.planTime);
 
             if (minutes > pRes.data?.planTime) {
-              // console.log(" paici re vai");
               axiosSecure
                 .patch(`/usersPremium/${email}`, {
                   type: "",
@@ -59,7 +57,6 @@ const Login = () => {
                 })
                 .then((rRes) => {
                   // console.log(rRes);
-                  isPremiumRefetch()
                 });
             }
           }
@@ -99,7 +96,6 @@ const Login = () => {
             // console.log("minute", minutes);
             // console.log("time", pRes.data?.planTime);
             if (minutes > pRes.data?.planTime) {
-              // console.log("paici re vai");
               axiosSecure
                 .patch(`/usersPremium/${res.user?.email}`, {
                   type: "",
@@ -108,7 +104,6 @@ const Login = () => {
                 })
                 .then((rRes) => {
                   // console.log(rRes.data);
-                  isPremiumRefetch()
                 });
             }
           }
