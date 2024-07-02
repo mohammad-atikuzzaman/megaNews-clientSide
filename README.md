@@ -1,6 +1,6 @@
 # Mega News
 
-### the live link of vibe palace 
+### Live link
 https://meganewsss.web.app/
 
 ##In this project I have use  
@@ -31,7 +31,7 @@ https://meganewsss.web.app/
 
 
 ## If any one want to clone this repo
-At first clone it, then run a comand "npm i", then manage ke
+At first clone it, then run a comand "npm i", then manage key of firebase and stripe for authentication and payment
 
 
 
