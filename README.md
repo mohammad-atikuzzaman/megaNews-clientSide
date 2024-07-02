@@ -1,4 +1,5 @@
 # Mega News
+The Article sharing application. Users can read article and also authorize users can post their article. There are a dashboard for admin. An admin can make another user a admin also they can make a content premium, only premium user can see premium article. User can get subscription by payment.
 
 ### Live link
 https://meganewsss.web.app/
@@ -11,7 +12,6 @@ https://meganewsss.web.app/
 - react toastify
 - axios js
 - tailwind css
-- mamba ui
 - react-countup
 - react select
 - react google charts
