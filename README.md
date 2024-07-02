@@ -1,11 +1,7 @@
-## Category : assignment12_category_0013
-
 # Mega News
 
 ### the live link of vibe palace 
 https://meganewsss.web.app/
-
-[Mega News](https://meganewsss.web.app/)
 
 ##In this project I have use  
 - React router dom
@@ -26,19 +22,16 @@ https://meganewsss.web.app/
 - react-hook-form
 
 ## Features
+- User can read Article and also authorzed user can post their article.
+- In all article page article user can find article by search and filter system.
+- Free user can read only free article and they can make maximum 1 post.
+- User can get subscription by doing payment for severeral time.
+- Only admin can see dashboard on navbar
+- Admins can make another user admin, also they can delete, decline, publish, premium a article
 
-- user can register or login  by email, password or google account
-- user can post article
-- if user is not get any premium plan user cant not see premium content and also they can not make more then 1 post request
-- user can update their profile 
-- for making post request and profile picture there are used imgbb image hosting
-- user can get subscription for several time
-- for subscription we have used react stripe js
-- there are dashboard for admin
-- a admin can make another user admin
-- admin can review users post request, he can aprove, decline and delete a post. Also he can make premium a post. Only premium users can see premium article.
-- for authorization I have use jwt in backend. and firebase on frontend.
-- user can update or delete his post.
+
+## If any one want to clone this repo
+At first clone it, then run a comand "npm i", then manage ke
 
 
 
